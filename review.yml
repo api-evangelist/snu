@@ -1,0 +1,46 @@
+---
+name: Seoul National University
+description: Seoul National University public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/snu/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      Verified one real, public, machine-readable API: the S-Space OAI-PMH 2.0
+      interface (DSpace institutional repository), which responded live with a
+      valid Identify response and ten metadata formats. No centralized
+      developer portal, open-data API, or official unified GitHub organization
+      was found; only lab-level GitHub orgs exist. The DSpace REST API
+      (/server/api and /rest) returned HTTP 403, indicating it is gated/blocked
+      to scripted access, so it was not cataloged as a usable public API. No
+      endpoints were fabricated; only confirmed URLs and statuses are recorded.
+    endpoints:
+      - url: https://s-space.snu.ac.kr/oai/request?verb=Identify
+        status: 200
+        note: Live OAI-PMH 2.0 Identify; repositoryName "SNU Open Repository and Archive".
+      - url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
+        status: 200
+        note: Returns oai_dc, qdc, mods, mets, marc, rdf, didl, ore, uketd_dc, xoai.
+      - url: https://s-space.snu.ac.kr/server/api
+        status: 403
+        note: DSpace REST API present but blocked to scripted access; not cataloged.
+      - url: https://s-space.snu.ac.kr/rest
+        status: 403
+        note: Legacy DSpace REST path also returns forbidden.
+      - url: https://s-space.snu.ac.kr/
+        status: 403
+        note: S-Space web UI forbids non-browser requests; OAI endpoint remains open.
+      - url: https://en.snu.ac.kr/
+        status: 200
+        note: Official English website, live.
+      - url: https://www.snu.ac.kr/
+        status: 200
+        note: Official Korean website, live.
+      - url: https://api.github.com/orgs/snu
+        status: 404
+        note: No official "snu" GitHub org; only lab-specific orgs exist.
+      - url: https://www.linkedin.com/school/seoulnational-university
+        status: 0
+        note: LinkedIn school page found via search; not probed for HTTP status.

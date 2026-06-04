@@ -1,0 +1,67 @@
+---
+aid: snu
+name: Seoul National University
+description: >-
+  Seoul National University (SNU) is South Korea's flagship national research
+  university, located in Seoul, and is ranked #34 in the QS World University
+  Rankings 2025. Its primary public, machine-readable developer footprint is
+  S-Space, the SNU Open Repository and Archive, a DSpace-based institutional
+  repository that exposes a standards-compliant OAI-PMH 2.0 interface for
+  metadata harvesting of theses, journal articles, and research outputs. SNU
+  does not publish a centralized developer portal or general-purpose open-data
+  API; most other digital services (mySNU portal, SSO, library discovery) are
+  gated and not openly documented.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/snu/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Research
+  - Open Access
+  - Institutional Repository
+  - OAI-PMH
+  - South Korea
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: snu:s-space-oai-pmh
+    name: S-Space OAI-PMH Repository Interface
+    description: >-
+      OAI-PMH 2.0 metadata harvesting interface for S-Space, the SNU Open
+      Repository and Archive (a DSpace institutional repository). Verified live
+      (HTTP 200) with repositoryName "SNU Open Repository and Archive" and
+      earliest datestamp 2008-07-31. Supports standard OAI-PMH verbs
+      (Identify, ListMetadataFormats, ListRecords, ListIdentifiers, ListSets,
+      GetRecord) and multiple metadata formats including oai_dc, qdc, mods,
+      mets, marc, rdf, didl, ore, uketd_dc, and xoai.
+    humanURL: https://s-space.snu.ac.kr/
+    baseURL: https://s-space.snu.ac.kr/oai/request
+    tags: [ OAI-PMH, Institutional Repository, DSpace, Open Access, Research, Metadata Harvesting ]
+    properties:
+      - type: Documentation
+        url: https://s-space.snu.ac.kr/
+      - type: x-OAI-PMH-Identify
+        url: https://s-space.snu.ac.kr/oai/request?verb=Identify
+      - type: x-OAI-PMH-MetadataFormats
+        url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
+common:
+  - type: Website
+    url: https://en.snu.ac.kr/
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/seoulnational-university
+  - type: Plans
+    url: plans/snu-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/snu-rate-limits.yml
+  - type: FinOps
+    url: finops/snu-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
