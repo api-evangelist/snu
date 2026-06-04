@@ -1,0 +1,52 @@
+{
+  "@context": {
+    "schema": "https://schema.org/",
+    "snu": "https://en.snu.ac.kr/vocab#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "oai": "http://www.openarchives.org/OAI/2.0/",
+    "name": "schema:name",
+    "url": "schema:url",
+    "description": "schema:description",
+    "sameAs": "schema:sameAs",
+    "foundingDate": "schema:foundingDate",
+    "address": "schema:address",
+    "Organization": "schema:CollegeOrUniversity",
+    "repository": {
+      "@id": "snu:repository",
+      "@type": "@id"
+    },
+    "baseURL": {
+      "@id": "snu:baseURL",
+      "@type": "@id"
+    },
+    "protocolVersion": "snu:protocolVersion",
+    "metadataFormat": "snu:metadataFormat",
+    "earliestDatestamp": {
+      "@id": "snu:earliestDatestamp",
+      "@type": "schema:Date"
+    },
+    "record": "snu:record",
+    "identifier": "dc:identifier",
+    "creator": "dc:creator",
+    "title": "dc:title",
+    "subject": "dc:subject",
+    "date": {
+      "@id": "dc:date",
+      "@type": "schema:Date"
+    },
+    "publisher": "dc:publisher",
+    "type": "dc:type"
+  },
+  "@type": "Organization",
+  "name": "Seoul National University",
+  "url": "https://en.snu.ac.kr/",
+  "description": "South Korea's flagship national research university, located in Seoul.",
+  "sameAs": [
+    "https://www.linkedin.com/school/seoulnational-university",
+    "https://en.snu.ac.kr/"
+  ],
+  "repository": "https://s-space.snu.ac.kr/",
+  "baseURL": "https://s-space.snu.ac.kr/oai/request",
+  "protocolVersion": "2.0",
+  "earliestDatestamp": "2008-07-31"
+}
