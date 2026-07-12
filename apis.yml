@@ -50,6 +50,8 @@ apis:
       - type: x-OAI-PMH-MetadataFormats
         url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
 common:
+  - type: DomainSecurity
+    url: security/snu-domain-security.yml
   - type: Website
     url: https://en.snu.ac.kr/
   - type: LinkedIn
