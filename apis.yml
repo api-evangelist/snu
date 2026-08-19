@@ -1,73 +1,234 @@
 ---
 aid: snu
 name: Seoul National University
+x-type: university
+x-category: Public Research University
 description: >-
-  Seoul National University (SNU) is South Korea's flagship national research
-  university, located in Seoul, and is ranked #34 in the QS World University
-  Rankings 2025. Its primary public, machine-readable developer footprint is
-  S-Space, the SNU Open Repository and Archive, a DSpace-based institutional
-  repository that exposes a standards-compliant OAI-PMH 2.0 interface for
-  metadata harvesting of theses, journal articles, and research outputs. SNU
-  does not publish a centralized developer portal or general-purpose open-data
-  API; most other digital services (mySNU portal, SSO, library discovery) are
-  gated and not openly documented.
+  Seoul National University (SNU) is South Korea's flagship national research university,
+  a national university corporation in Seoul ranked in the QS World top 40 and identified
+  by ROR as https://ror.org/04h9pn542. Like most universities it is a federation of
+  buyers rather than a producer of APIs: it operates no developer portal, no open-data
+  portal, no API gateway, no official GitHub organization, and no OAuth or OIDC
+  authorization server. It publishes no API documentation of any kind, and every contract
+  in this repository was written from live probing rather than from something SNU wrote.
+
+  What it does operate — verified on its own hosts and its own address block on
+  2026-08-19 — is four machine-readable surfaces. Two OAI-PMH 2.0 data providers: S-Space,
+  the SNU Open Repository and Archive (DSpace 5.5, content from 2008, twelve metadata
+  formats, 100+ sets, three harvesting contexts including OpenAIRE and DRIVER), and
+  KOSSDA, the Korea Social Science Data Archive (DSpace 5.6, content from 2017). An
+  OpenSearch 1.1 search interface over S-Space. And a SAML 2.0 Identity Provider,
+  entityID https://kafegw.snu.ac.kr/idp/simplesamlphp, registered in the KAFE national
+  federation and exported into eduGAIN with REFEDS Research & Scholarship support and a
+  Sirtfi assurance assertion — the single most consequential programmable surface the
+  institution runs, and one no catalog had recorded.
+
+  Two honest limits belong in the same breath. The repository hosts front everything
+  except OAI-PMH with a JavaScript bot challenge that returns HTTP 200 and an HTML shell
+  to any machine client, so the OpenSearch interface is gated rather than open. And SNU's
+  library discovery runs on Ex Libris Alma and Primo under institution code 82SNU — real,
+  but a tenancy, recorded below as such and never scored as SNU's engineering.
 type: Index
 accessModel:
   pricing: free
-  onboarding: unknown
+  onboarding: none
   trial: false
   try_now: false
-  public: false
+  public: true
   label: Free
-  confidence: medium
+  confidence: high
   source:
-  - plans
-  generated: '2026-07-22'
-  method: derived
+    - probed
+  generated: '2026-08-19'
+  method: probed
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/snu.png
 url: https://raw.githubusercontent.com/api-evangelist/snu/refs/heads/main/apis.yml
 tags:
-  - Education
-  - Higher Education
   - University
-  - Research
-  - Open Access
-  - Institutional Repository
-  - OAI-PMH
+  - Higher Education
+  - Education
   - South Korea
+  - Research
+  - Research Data
+  - Institutional Repository
+  - Research Repository
+  - Identity Federation
+  - OAI-PMH
+  - SAML
+  - Open Access
+  - Library
+  - National University
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-08-19'
 specificationVersion: '0.23'
 apis:
   - aid: snu:s-space-oai-pmh
     name: S-Space OAI-PMH Repository Interface
+    x-operator: institution
     description: >-
-      OAI-PMH 2.0 metadata harvesting interface for S-Space, the SNU Open
-      Repository and Archive (a DSpace institutional repository). Verified live
-      (HTTP 200) with repositoryName "SNU Open Repository and Archive" and
-      earliest datestamp 2008-07-31. Supports standard OAI-PMH verbs
-      (Identify, ListMetadataFormats, ListRecords, ListIdentifiers, ListSets,
-      GetRecord) and multiple metadata formats including oai_dc, qdc, mods,
-      mets, marc, rdf, didl, ore, uketd_dc, and xoai.
+      OAI-PMH 2.0 metadata harvesting for S-Space, the SNU Open Repository and Archive.
+      Verified live and anonymous on 2026-08-19: repositoryName "SNU Open Repository and
+      Archive", repositoryIdentifier s-space.snu.ac.kr, adminEmail s-space@snu.ac.kr,
+      earliestDatestamp 2008-07-31T15:00:00Z, granularity YYYY-MM-DDThh:mm:ssZ,
+      deletedRecord transient. Twelve metadata formats (oai_dc, qdc, mods, mets, marc,
+      rdf, didl, ore, uketd_dc, xoai, dim, etdms) and over 100 sets. Three harvesting
+      contexts: the default /oai/request, DRIVER at /oai/driver, and OpenAIRE at
+      /oai/openaire. Runs DSpace 5.5 on 147.46.181.99, inside SNU's own address block.
+      The OAI paths are deliberately exempted from the site's JavaScript bot challenge, so
+      a harvester without a browser reaches them directly. No OpenAPI is published by SNU;
+      the contract here was probed.
     humanURL: https://s-space.snu.ac.kr/
     baseURL: https://s-space.snu.ac.kr/oai/request
-    tags: [ OAI-PMH, Institutional Repository, DSpace, Open Access, Research, Metadata Harvesting ]
+    tags: [OAI-PMH, Institutional Repository, DSpace, Open Access, Research, Metadata Harvesting]
     properties:
-      - type: Documentation
-        url: https://s-space.snu.ac.kr/
+      - type: OpenAPI
+        url: openapi/snu-s-space-oai-pmh-openapi.yml
       - type: x-OAI-PMH-Identify
         url: https://s-space.snu.ac.kr/oai/request?verb=Identify
       - type: x-OAI-PMH-MetadataFormats
         url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
+      - type: x-OAI-PMH-Sets
+        url: https://s-space.snu.ac.kr/oai/request?verb=ListSets
+      - type: x-OAI-PMH-OpenAIRE
+        url: https://s-space.snu.ac.kr/oai/openaire?verb=Identify
+      - type: x-OAI-PMH-DRIVER
+        url: https://s-space.snu.ac.kr/oai/driver?verb=Identify
+  - aid: snu:kossda-oai-pmh
+    name: KOSSDA OAI-PMH Repository Interface
+    x-operator: institution
+    description: >-
+      OAI-PMH 2.0 metadata harvesting for KOSSDA (한국사회과학자료원), the Korea Social
+      Science Data Archive at Seoul National University — SNU's social-science research
+      data archive, listed in re3data as r3d100014654 with no API recorded there. Verified
+      live and anonymous on 2026-08-19: adminEmail kossda@snu.ac.kr, earliestDatestamp
+      2017-04-09T11:10:50Z, same twelve metadata formats, handles under prefix
+      20.500.12236. DSpace 5.6 on 147.46.181.153, SNU's own address block. Two defects
+      are recorded rather than smoothed over: the endpoint advertises its own baseURL as
+      plain http:// while serving over HTTPS, and Identify needed a read timeout above 45
+      seconds to complete, which will fail most default harvester settings.
+    humanURL: https://kossda.snu.ac.kr/
+    baseURL: https://kossda.snu.ac.kr/oai/request
+    tags: [OAI-PMH, Research Data, DSpace, Social Science, Data Archive, Metadata Harvesting]
+    properties:
+      - type: OpenAPI
+        url: openapi/snu-kossda-oai-pmh-openapi.yml
+      - type: x-OAI-PMH-Identify
+        url: https://kossda.snu.ac.kr/oai/request?verb=Identify
+      - type: x-re3data
+        url: https://doi.org/10.17616/R31NJNSU
+  - aid: snu:kafe-saml-idp
+    name: Seoul National University SAML 2.0 Identity Provider
+    x-operator: institution
+    description: >-
+      SNU's federated identity provider, entityID
+      https://kafegw.snu.ac.kr/idp/simplesamlphp, registered by the Korea Access
+      Federation (registrationAuthority http://kafe.kreonet.net, registrationInstant
+      2024-06-25) and exported into eduGAIN, where exactly one of 10,566 entities carries
+      the snu.ac.kr scope. SimpleSAMLphp, SAML 2.0, SSO and SLO over HTTP-Redirect and
+      HTTP-POST, transient NameID, separate signing and encryption certificates issued to
+      CN=kafegw.snu.ac.kr, O=SNU, OU=Information Systems and Technology, valid to
+      2028-06-03. Declares shibmd:Scope snu.ac.kr, supports REFEDS Research & Scholarship,
+      and asserts Sirtfi with a published security contact. Institution-operated by
+      definition and machine-readable by definition — and not previously catalogued. Note
+      that SNU does not serve its own metadata: the entityID URL 404s and the
+      SimpleSAMLphp metadata path returns 500, so the eduGAIN aggregate is the only
+      retrievable copy, mirrored here.
+    humanURL: https://kafegw.snu.ac.kr/
+    baseURL: https://kafegw.snu.ac.kr/saml/module.php/saml/idp/singleSignOnService
+    tags: [SAML, Identity Federation, Shibboleth, eduGAIN, KAFE, Single Sign-On, Authentication]
+    properties:
+      - type: x-SAMLMetadata
+        url: authentication/snu-kafe-saml-idp-metadata.xml
+      - type: Authentication
+        url: authentication/snu-authentication.yml
+      - type: x-FederationMetadata
+        url: https://mds.edugain.org/edugain-v2.xml
+  - aid: snu:s-space-opensearch
+    name: S-Space OpenSearch Interface
+    x-operator: institution
+    description: >-
+      OpenSearch 1.1 search over the SNU Open Repository and Archive. A description
+      document is served at /open-search/description.xml as
+      application/opensearchdescription+xml with LongName "SNU Open Repository and
+      Archive", and /open-search/ answers keyword queries in Atom, RSS 2.0 or HTML with
+      opensearch: namespace annotations. GATED, not open: unlike the OAI-PMH endpoints,
+      this path sits behind the site's JavaScript interstitial, so a machine client
+      receives HTTP 200 and a ~1 KB HTML shell carrying a js-challenge token rather than
+      results. Every example in this repository was captured by replaying that token as a
+      cookie. Recorded as a real surface with its real access condition attached.
+    humanURL: https://s-space.snu.ac.kr/
+    baseURL: https://s-space.snu.ac.kr/open-search/
+    tags: [OpenSearch, Search, Institutional Repository, DSpace, Atom, RSS]
+    properties:
+      - type: OpenAPI
+        url: openapi/snu-s-space-opensearch-openapi.yml
+      - type: x-OpenSearchDescription
+        url: https://s-space.snu.ac.kr/open-search/description.xml
+  - aid: snu:library-discovery-primo
+    name: SNU Library Discovery (Ex Libris Primo / Alma) — tenancy
+    x-operator: tenant
+    x-vendor: Ex Libris (Clarivate)
+    x-tenant-identifier: 82SNU_INST
+    description: >-
+      Seoul National University Library runs library management and discovery on Ex
+      Libris Alma and Primo, institution code 82SNU / 82SNU_INST, on the
+      institution-specific host snu-primo.hosted.exlibrisgroup.com. Confirmed from SNU
+      Library's own homepage (lib.snu.ac.kr), which links search, journal search, thesis
+      search and full-display into that host and pulls cover thumbnails from
+      ap01.alma.exlibrisgroup.com. This entry exists to record a real institutional fact —
+      SNU operates a library discovery service — while refusing the misattribution that
+      goes with it. The catalog data is SNU's; the API, the contract and the engineering
+      are Ex Libris's, and no Ex Libris specification is saved under this institution.
+      Score the contract against Ex Libris, not against SNU.
+    humanURL: https://lib.snu.ac.kr/
+    baseURL: https://snu-primo.hosted.exlibrisgroup.com/primo-explore/search?vid=82SNU
+    tags: [Library, Discovery, Primo, Alma, Ex Libris, Tenant]
+    properties:
+      - type: Website
+        url: https://lib.snu.ac.kr/
 common:
-  - type: DomainSecurity
-    url: security/snu-domain-security.yml
   - type: Website
     url: https://en.snu.ac.kr/
+  - type: PrivacyPolicy
+    url: https://en.snu.ac.kr/privacy-policy
   - type: LinkedIn
     url: https://www.linkedin.com/school/seoulnational-university
+  - type: Support
+    url: https://ist.snu.ac.kr/
+  - type: ResearchRepository
+    url: https://s-space.snu.ac.kr/
+  - type: ResearchRepository
+    url: https://kossda.snu.ac.kr/
+  - type: LibraryCatalog
+    url: https://lib.snu.ac.kr/
+  - type: CourseCatalog
+    url: https://sugang.snu.ac.kr/
+  - type: IdentityFederation
+    url: https://kafegw.snu.ac.kr/
+  - type: AIPolicy
+    url: https://www.snu.ac.kr/about/downloads?md=v&bbsidx=166508
+  - type: AITooling
+    url: https://www.snu.ac.kr/snunow/press?md=v&bbsidx=170942
+  - type: Authentication
+    url: authentication/snu-authentication.yml
+  - type: Conformance
+    url: conformance/snu-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/snu-lifecycle.yml
+  - type: Scopes
+    url: scopes/snu-scopes.yml
+  - type: Errors
+    url: errors/snu-errors.yml
+  - type: Vocabulary
+    url: vocabulary/snu-vocabulary.yml
+  - type: JSONLD
+    url: json-ld/snu-context.jsonld
+  - type: Rules
+    url: rules/snu-rules.yml
+  - type: DomainSecurity
+    url: security/snu-domain-security.yml
   - type: Plans
     url: plans/snu-plans-pricing.yml
   - type: RateLimits
@@ -76,6 +237,96 @@ common:
     url: finops/snu-finops.yml
   - type: Review
     url: review.yml
+x-coverage:
+  state: covered
+  reason: institution_operates_limited_public_surface
+  detail: >-
+    Not blocked and not thin by accident. Seventy-plus URLs across snu.ac.kr and its
+    subdomains were probed on 2026-08-19, in Korean as well as English, and four
+    institution-operated machine-readable surfaces were found and verified: two OAI-PMH
+    2.0 repositories, one OpenSearch 1.1 interface, one SAML 2.0 identity provider in
+    eduGAIN. The negatives are as load-bearing as the positives. api.snu.ac.kr exists and
+    resolves to SNU's block but answers 403 at the root and 404 on every path, so it is
+    not a gateway. There is no open-data portal — data.snu.ac.kr is a research lab's
+    website, not CKAN or Socrata. The LMS at etl.snu.ac.kr is neither Moodle nor Canvas
+    and exposes no LTI. dcollection.snu.ac.kr runs KERIS dCollection on SNU's own network
+    but serves no OAI-PMH. There is no official SNU GitHub organization, only lab-level
+    ones, so no GitHubOrganization pointer is claimed. Two access conditions shape what a
+    machine can actually reach: s-space and kossda front everything except OAI-PMH with a
+    JavaScript challenge returning HTTP 200 and an HTML shell, and lib.snu.ac.kr locks its
+    WordPress REST API behind a 401. One correction to the 2026-06-03 profile is recorded
+    in errors/snu-errors.yml — the DSpace REST API previously reported as "present but
+    403" does not exist at all; behind the challenge cookie those paths 404.
+  evidence:
+    - url: https://s-space.snu.ac.kr/oai/request?verb=Identify
+      status: 200
+      note: OAI-PMH 2.0 Identify, anonymous, no challenge. repositoryName "SNU Open Repository and Archive".
+    - url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
+      status: 200
+      note: Twelve metadata formats.
+    - url: https://s-space.snu.ac.kr/oai/request?verb=ListSets
+      status: 200
+      note: Over 100 sets (com_10371_*, col_10371_*).
+    - url: https://s-space.snu.ac.kr/oai/openaire?verb=Identify
+      status: 200
+      note: OpenAIRE harvesting context, live.
+    - url: https://s-space.snu.ac.kr/oai/driver?verb=Identify
+      status: 200
+      note: DRIVER harvesting context, live.
+    - url: https://kossda.snu.ac.kr/oai/request?verb=Identify
+      status: 200
+      note: KOSSDA OAI-PMH live; required a 120s read timeout, failed at 30s and 45s.
+    - url: https://mds.edugain.org/edugain-v2.xml
+      status: 200
+      note: >-
+        eduGAIN aggregate, 92.9 MB, 10,566 entities. Exactly one carries scope snu.ac.kr —
+        SNU's SAML 2.0 IdP. Mirrored to authentication/snu-kafe-saml-idp-metadata.xml.
+    - url: https://kafegw.snu.ac.kr/
+      status: 200
+      note: IdP host live on 147.46.10.201, SNU's own address block.
+    - url: https://kafegw.snu.ac.kr/saml/module.php/saml/idp/metadata.php
+      status: 500
+      note: SNU does not serve its own SAML metadata; only the federation aggregate has it.
+    - url: https://kafegw.snu.ac.kr/idp/simplesamlphp
+      status: 404
+      note: The published entityID is not dereferenceable.
+    - url: https://s-space.snu.ac.kr/open-search/description.xml
+      status: 200
+      note: >-
+        OpenSearch 1.1 description — but only with the js-challenge cookie replayed.
+        Cold, this same 200 returns a 1,004-byte HTML challenge shell. Soft-200.
+    - url: https://s-space.snu.ac.kr/rest
+      status: 404
+      note: >-
+        Behind the challenge cookie. Corrects the 2026-06-03 finding of 403 — no DSpace
+        REST API is deployed, and the 403 was the bot challenge, not an access control.
+    - url: https://s-space.snu.ac.kr/server/api
+      status: 404
+      note: DSpace 7 REST path absent; this is DSpace 5.5.
+    - url: https://api.snu.ac.kr/
+      status: 403
+      note: Host exists on SNU's block; 404 on /v1, /api, /docs, /swagger, /health, /openapi.json, /status. Not a gateway.
+    - url: https://data.snu.ac.kr/
+      status: 200
+      note: Data Science & AI Laboratory website. Not an open-data portal — do not read the hostname as one.
+    - url: https://etl.snu.ac.kr/mod/lti/token.php
+      status: 404
+      note: LMS is not Moodle and exposes no LTI; /theme/ and /local/ return soft-404s with the same 850-byte body.
+    - url: https://dcollection.snu.ac.kr/oai/request?verb=Identify
+      status: 200
+      note: Soft-404 — returns the dCollection HTML page, not OAI-PMH XML. No harvesting surface here.
+    - url: https://lib.snu.ac.kr/wp-json/
+      status: 401
+      note: WordPress REST API present but locked (rest_not_logged_in). Gated, not public.
+    - url: https://www.snu.ac.kr/robots.txt
+      status: 200
+      note: Blocks 20+ named crawlers including Applebot and Amazonbot; no llms.txt (404) and no security.txt (404).
+    - url: https://api.datacite.org/providers?query=Seoul%20National%20University
+      status: 200
+      note: Zero results. SNU is not a DataCite member; repositories mint Handles, not DOIs.
+    - url: https://api.github.com/orgs/snu
+      status: 404
+      note: No official SNU GitHub organization; only lab-level orgs exist.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
