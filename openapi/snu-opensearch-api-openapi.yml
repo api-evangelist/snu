@@ -1,0 +1,141 @@
+openapi: 3.2.0
+info:
+  title: SNU S-Space Interface Open Search API
+  version: '1.1'
+  summary: OpenSearch 1.1 search interface over the SNU Open Repository and Archive.
+  description: 'S-Space serves an OpenSearch 1.1 description document at /open-search/description.xml and answers queries at /open-search/ in Atom, RSS 2.0 or HTML. This is a genuine machine-readable search surface on Seoul National University''s own host, and it is the only keyword-search API the institution operates.
+
+    It carries one significant caveat that must not be papered over. Unlike the OAI-PMH endpoints, /open-search/ sits BEHIND the JavaScript interstitial challenge that fronts s-space.snu.ac.kr. A client without a browser receives HTTP 200 and a ~1 KB HTML shell containing a `js-challenge` token, not search results — a textbook soft-200. Real results require replaying that token as a `js-challenge` cookie. Every example in this contract was captured that way. Treat this surface as GATED, not open: the status code says 200, the payload says no.'
+  x-generated: '2026-08-19'
+  x-method: probed
+  x-operator: institution
+  x-source: Live probes of https://s-space.snu.ac.kr/open-search/description.xml and /open-search/ (atom, rss) on 2026-08-19, with the js-challenge cookie replayed, plus the OpenSearch 1.1 specification. SNU publishes no OpenAPI for this surface.
+  contact:
+    name: S-Space Administrator, Seoul National University
+    email: s-space@snu.ac.kr
+    url: https://s-space.snu.ac.kr/
+  license:
+    name: Not stated
+    identifier: NOASSERTION
+servers:
+- url: https://s-space.snu.ac.kr
+  description: S-Space, Seoul National University.
+security:
+- jsChallengeCookie: []
+tags:
+- name: OpenSearch
+  description: OpenSearch 1.1 description and query endpoints.
+paths:
+  /open-search/description.xml:
+    get:
+      tags:
+      - OpenSearch
+      operationId: getOpenSearchDescription
+      summary: Retrieve the OpenSearch 1.1 description document
+      description: Returns the OpenSearchDescription document advertising the query templates. Requires the js-challenge cookie; without it the response is a 200 HTML shell.
+      responses:
+        '200':
+          description: OpenSearch description document.
+          content:
+            application/opensearchdescription+xml:
+              schema:
+                type: object
+              examples:
+                description:
+                  summary: Captured live 2026-08-19 with the js-challenge cookie replayed
+                  externalValue: ../examples/snu-s-space-opensearch-description-example.xml
+            text/html:
+              schema:
+                type: string
+              examples:
+                challenge:
+                  summary: What a client without JavaScript actually receives — HTTP 200 with a js-challenge shell, no OpenSearch document.
+                  value: <!doctype html><html lang="ko">... <div id="jc-data" data-name="js-challenge" data-token="..." data-ttl="1800" ...>
+  /open-search/:
+    get:
+      tags:
+      - OpenSearch
+      operationId: openSearchQuery
+      summary: Search the repository
+      description: Keyword search across S-Space items, returning an OpenSearch-annotated Atom or RSS feed. Requires the js-challenge cookie.
+      parameters:
+      - name: query
+        in: query
+        required: true
+        description: Search terms.
+        schema:
+          type: string
+          examples:
+          - climate
+      - name: format
+        in: query
+        required: false
+        description: Response syndication format.
+        schema:
+          type: string
+          enum:
+          - atom
+          - rss
+          - html
+          default: atom
+      - name: start
+        in: query
+        required: false
+        description: Zero-based index of the first result.
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+      - name: rpp
+        in: query
+        required: false
+        description: Results per page.
+        schema:
+          type: integer
+          minimum: 1
+          default: 10
+      - name: scope
+        in: query
+        required: false
+        description: Handle of a community or collection to restrict the search to.
+        schema:
+          type: string
+          examples:
+          - 10371/29
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+      responses:
+        '200':
+          description: An OpenSearch result feed — or, for a client that did not solve the JS challenge, a 200 HTML challenge shell.
+          content:
+            application/atom+xml:
+              schema:
+                type: object
+              examples:
+                atom:
+                  summary: Captured live 2026-08-19 with the js-challenge cookie replayed
+                  externalValue: ../examples/snu-s-space-opensearch-atom-example.xml
+            application/rss+xml:
+              schema:
+                type: object
+            text/html:
+              schema:
+                type: string
+components:
+  securitySchemes:
+    jsChallengeCookie:
+      type: apiKey
+      in: cookie
+      name: js-challenge
+      description: 'Not authentication. A bot-mitigation interstitial: the first request returns an HTML page carrying a `data-token`, which the client must set as the `js-challenge` cookie (TTL 1800s) before the real response is served. Documented here because a machine client cannot use this surface without it.'

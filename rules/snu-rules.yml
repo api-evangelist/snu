@@ -1,0 +1,126 @@
+# generated: '2026-08-19'
+# method: derived
+# source: >-
+#   Derived from openapi/*.yml and conformance/snu-conformance.yml in this repository.
+#   These rules encode the properties that make a Seoul National University surface
+#   harvestable, and they are written against the failure modes actually observed on
+#   2026-08-19 — an OAI baseURL advertised over plain HTTP, a soft-200 bot challenge in
+#   front of a search endpoint, protocol errors returned with HTTP 200. Built-in Spectral
+#   functions only; no custom JS.
+extends: spectral:oas
+rules:
+  snu-institution-owned-server:
+    description: >-
+      Every server in an SNU contract must sit under snu.ac.kr. This is the operator
+      check: a contract saved under this institution whose server points at a vendor host
+      is a misattribution, and it is the specific defect this profile exists to prevent.
+    message: "Server '{{value}}' is not under snu.ac.kr — verify the operator before saving this contract here"
+    given: "$.servers[*].url"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://[a-z0-9.-]*snu\\.ac\\.kr(/|$)"
+
+  snu-servers-https-only:
+    description: >-
+      Server URLs must use HTTPS. KOSSDA's own OAI-PMH Identify response advertises
+      http://kossda.snu.ac.kr/oai/request; a harvester that follows the advertised baseURL
+      leaves TLS. Contracts in this repo must not repeat that.
+    message: "Server '{{value}}' must use https://"
+    given: "$.servers[*].url"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://"
+
+  snu-operation-id-required:
+    description: Every operation must carry an operationId so it can be referenced by tooling.
+    message: "Operation at {{path}} is missing operationId"
+    given: "$.paths[*][get,post,put,patch,delete]"
+    severity: error
+    then:
+      field: operationId
+      function: truthy
+
+  snu-operation-tagged:
+    description: Every operation must carry at least one tag.
+    message: "Operation at {{path}} must include at least one tag"
+    given: "$.paths[*][get,post,put,patch,delete]"
+    severity: error
+    then:
+      field: tags
+      function: truthy
+
+  snu-contact-is-institutional:
+    description: >-
+      info.contact.email must be an snu.ac.kr address. A contract whose contact belongs to
+      a vendor is the vendor's contract, whatever the filename says.
+    message: "info.contact.email '{{value}}' is not an snu.ac.kr address"
+    given: "$.info.contact.email"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "@snu\\.ac\\.kr$"
+
+  snu-info-description-required:
+    description: >-
+      info.description must be present and substantial. Every contract here is derived
+      from probing rather than from a published SNU specification, and the description is
+      where that provenance and its limits are stated.
+    message: "info.description must be at least 200 characters explaining what was probed and what it means"
+    given: "$.info"
+    severity: error
+    then:
+      field: description
+      function: length
+      functionOptions:
+        min: 200
+
+  snu-response-examples-required:
+    description: >-
+      Probed contracts must ship a captured example. Nothing in this repository is
+      credited to SNU on assertion alone.
+    message: "Response content at {{path}} should carry examples captured from the live surface"
+    given: "$.paths[*][get].responses[*].content[application/xml,application/atom+xml,application/opensearchdescription+xml]"
+    severity: warn
+    then:
+      field: examples
+      function: truthy
+
+  snu-oai-verb-parameter-enumerated:
+    description: >-
+      An OAI-PMH operation's `verb` parameter must be an explicit enum. OAI-PMH returns
+      HTTP 200 for badVerb, so an unconstrained verb parameter produces silent failures a
+      status-code check will never catch.
+    message: "The OAI-PMH 'verb' parameter must enumerate the supported verbs"
+    given: "$.paths[*][get].parameters[?(@.name == 'verb')].schema"
+    severity: error
+    then:
+      field: enum
+      function: truthy
+
+  snu-oai-error-schema-present:
+    description: >-
+      Any contract describing an OAI-PMH surface must define the protocol error shape,
+      because those errors arrive with HTTP status 200.
+    message: "Define an OAIError schema — OAI-PMH reports failures inside a 200 response"
+    given: "$.components.schemas"
+    severity: warn
+    then:
+      field: OAIError
+      function: truthy
+
+  snu-no-license-fabrication:
+    description: >-
+      SNU states no licence on any public surface. Contracts here must say so with
+      NOASSERTION rather than assert a licence the institution never granted.
+    message: "info.license.identifier must be NOASSERTION unless SNU has published a licence"
+    given: "$.info.license.identifier"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: "^NOASSERTION$"

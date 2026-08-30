@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/snu/main/json-schema/snu-oai-identify.json",
+  "title": "SNU OAI-PMH Identify",
+  "description": "JSON projection of the OAI-PMH 2.0 Identify response returned by Seoul National University's two repository data providers, S-Space (s-space.snu.ac.kr) and KOSSDA (kossda.snu.ac.kr). The wire format is XML; this schema exists so the response can be validated and typed after conversion. generated 2026-08-19; method probed; source examples/snu-s-space-oai-identify-example.xml and examples/snu-kossda-oai-identify-example.xml, both captured live.",
+  "type": "object",
+  "required": ["repositoryName", "baseURL", "protocolVersion", "adminEmail", "earliestDatestamp", "deletedRecord", "granularity"],
+  "additionalProperties": false,
+  "properties": {
+    "repositoryName": {
+      "type": "string",
+      "description": "Human-readable repository name.",
+      "examples": ["SNU Open Repository and Archive", "한국사회과학자료원 (KOSSDA)"]
+    },
+    "baseURL": {
+      "type": "string",
+      "format": "uri",
+      "description": "Base URL the repository advertises for itself. Note that KOSSDA advertises an http:// URL while serving over HTTPS.",
+      "examples": ["https://s-space.snu.ac.kr/oai/request", "http://kossda.snu.ac.kr/oai/request"]
+    },
+    "protocolVersion": { "type": "string", "const": "2.0" },
+    "adminEmail": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "format": "email" },
+      "examples": [["s-space@snu.ac.kr"], ["kossda@snu.ac.kr"]]
+    },
+    "earliestDatestamp": {
+      "type": "string",
+      "format": "date-time",
+      "examples": ["2008-07-31T15:00:00Z", "2017-04-09T11:10:50Z"]
+    },
+    "deletedRecord": { "type": "string", "enum": ["no", "persistent", "transient"] },
+    "granularity": { "type": "string", "enum": ["YYYY-MM-DD", "YYYY-MM-DDThh:mm:ssZ"] },
+    "compression": { "type": "array", "items": { "type": "string" } },
+    "description": {
+      "type": "object",
+      "description": "Repository description container; both SNU repositories supply an oai-identifier description.",
+      "properties": {
+        "oaiIdentifier": {
+          "type": "object",
+          "required": ["scheme", "repositoryIdentifier", "delimiter", "sampleIdentifier"],
+          "properties": {
+            "scheme": { "type": "string", "const": "oai" },
+            "repositoryIdentifier": {
+              "type": "string",
+              "examples": ["s-space.snu.ac.kr", "kossda.snu.ac.kr"]
+            },
+            "delimiter": { "type": "string", "const": ":" },
+            "sampleIdentifier": {
+              "type": "string",
+              "examples": ["oai:s-space.snu.ac.kr:10371/1234", "oai:kossda.snu.ac.kr:20.500.12236/1234"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

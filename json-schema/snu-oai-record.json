@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/snu/main/json-schema/snu-oai-record.json",
+  "title": "SNU OAI-PMH Record (oai_dc)",
+  "description": "JSON projection of a single OAI-PMH record in the oai_dc metadata format as served by Seoul National University's repositories. Field cardinality follows what was actually observed in a live ListRecords harvest on 2026-08-19, not what the Dublin Core specification permits: every element is optional and repeatable, and SNU records routinely carry several dc:date and dc:identifier values. generated 2026-08-19; method probed; source examples/snu-s-space-oai-getrecord-example.xml.",
+  "type": "object",
+  "required": ["header"],
+  "additionalProperties": false,
+  "properties": {
+    "header": {
+      "type": "object",
+      "required": ["identifier", "datestamp"],
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "pattern": "^oai:(s-space|kossda)\\.snu\\.ac\\.kr:.+$",
+          "examples": ["oai:s-space.snu.ac.kr:10371/702"]
+        },
+        "datestamp": { "type": "string", "format": "date-time" },
+        "setSpec": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(com|col)_\\d+_\\d+$" },
+          "examples": [["com_10371_646", "col_10371_647"]]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["deleted"],
+          "description": "Present only on deleted records. Both repositories declare deletedRecord: transient."
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "oai_dc payload. All elements optional and repeatable, matching observed data.",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "array", "items": { "type": "string" } },
+        "creator": { "type": "array", "items": { "type": "string" }, "description": "Names only. No ORCID iDs appear anywhere in SNU's oai_dc output." },
+        "contributor": { "type": "array", "items": { "type": "string" } },
+        "subject": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "array", "items": { "type": "string" } },
+        "publisher": { "type": "array", "items": { "type": "string" } },
+        "date": { "type": "array", "items": { "type": "string" }, "description": "Mixed granularity in practice: full timestamps for deposit events alongside YYYY-MM publication dates." },
+        "type": { "type": "array", "items": { "type": "string" }, "examples": [["Article"]] },
+        "format": { "type": "array", "items": { "type": "string" } },
+        "identifier": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Mixes a citation string with the Handle URL. Handles, not DOIs.",
+          "examples": [["국립대학도서관보 제25집", "https://hdl.handle.net/10371/702"]]
+        },
+        "language": { "type": "array", "items": { "type": "string" }, "examples": [["ko"]] },
+        "relation": { "type": "array", "items": { "type": "string" } },
+        "rights": { "type": "array", "items": { "type": "string" } },
+        "source": { "type": "array", "items": { "type": "string" } },
+        "coverage": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

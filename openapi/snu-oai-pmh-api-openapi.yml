@@ -1,0 +1,243 @@
+openapi: 3.2.0
+info:
+  title: Snu OAI PMH API
+  version: '2.0'
+  license:
+    name: Not stated
+    identifier: NOASSERTION
+  x-generated: '2026-08-19'
+  x-method: probed
+  x-operator: institution
+  x-refined-note:
+  - x-source differs across the merged source definitions and was not carried
+  description: 'Operations tagged OAI-PMH across 2 of this provider''s published API definitions: snu-kossda-oai-pmh-openapi.yml, snu-s-space-oai-pmh-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://kossda.snu.ac.kr/oai/request
+  description: Default OAI-PMH context, reachable over HTTPS. The endpoint advertises itself as http:// in its own Identify response; prefer this HTTPS form.
+- url: https://kossda.snu.ac.kr/oai/driver
+  description: DRIVER guidelines harvesting context.
+- url: https://s-space.snu.ac.kr/oai/request
+  description: Default OAI-PMH context (oai_dc and 11 other metadata formats).
+- url: https://s-space.snu.ac.kr/oai/driver
+  description: DRIVER guidelines harvesting context.
+- url: https://s-space.snu.ac.kr/oai/openaire
+  description: OpenAIRE guidelines harvesting context.
+security: []
+tags:
+- name: OAI-PMH
+  description: Open Archives Initiative Protocol for Metadata Harvesting 2.0 verbs.
+paths:
+  /:
+    get:
+      tags:
+      - OAI-PMH
+      operationId: kossdaOaiRequest
+      summary: Issue an OAI-PMH 2.0 request against KOSSDA
+      description: Single-endpoint protocol; `verb` selects the operation. Responses are `application/xml`. Allow a generous read timeout — see the description on info for the measured latency.
+      parameters:
+      - name: verb
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - Identify
+          - ListMetadataFormats
+          - ListSets
+          - ListIdentifiers
+          - ListRecords
+          - GetRecord
+      - name: metadataPrefix
+        in: query
+        required: false
+        description: Twelve formats confirmed live on 2026-08-19.
+        schema:
+          type: string
+          enum:
+          - oai_dc
+          - qdc
+          - mods
+          - mets
+          - marc
+          - rdf
+          - didl
+          - ore
+          - uketd_dc
+          - xoai
+          - dim
+          - etdms
+      - name: identifier
+        in: query
+        required: false
+        schema:
+          type: string
+          examples:
+          - oai:kossda.snu.ac.kr:20.500.12236/1234
+      - name: set
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: resumptionToken
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An OAI-PMH 2.0 response document, or a protocol error inside `<error>`.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OAIPMHResponse'
+              examples:
+                identify:
+                  summary: verb=Identify (captured live 2026-08-19)
+                  externalValue: ../examples/snu-kossda-oai-identify-example.xml
+    servers:
+    - url: https://kossda.snu.ac.kr/oai/request
+      description: Default OAI-PMH context, reachable over HTTPS. The endpoint advertises itself as http:// in its own Identify response; prefer this HTTPS form.
+    - url: https://kossda.snu.ac.kr/oai/driver
+      description: DRIVER guidelines harvesting context.
+components:
+  schemas:
+    Identify:
+      type: object
+      properties:
+        repositoryName:
+          type: string
+          examples:
+          - 한국사회과학자료원 (KOSSDA)
+        baseURL:
+          type: string
+          format: uri
+        protocolVersion:
+          type: string
+          const: '2.0'
+        adminEmail:
+          type: string
+          format: email
+        earliestDatestamp:
+          type: string
+          format: date-time
+          examples:
+          - '2017-04-09T11:10:50Z'
+        deletedRecord:
+          type: string
+          enum:
+          - false
+          - persistent
+          - transient
+        granularity:
+          type: string
+          enum:
+          - YYYY-MM-DD
+          - YYYY-MM-DDThh:mm:ssZ
+    OAIError:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - badArgument
+          - badResumptionToken
+          - badVerb
+          - cannotDisseminateFormat
+          - idDoesNotExist
+          - noRecordsMatch
+          - noMetadataFormats
+          - noSetHierarchy
+        message:
+          type: string
+    OAIPMHResponse:
+      type: object
+      description: 'Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/. Authoritative definition: http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.'
+      properties:
+        responseDate:
+          type: string
+          format: date-time
+        request:
+          type: string
+          format: uri
+        Identify:
+          $ref: '#/components/schemas/Identify'
+        error:
+          $ref: '#/components/schemas/OAIError'
+    Identify_2:
+      type: object
+      properties:
+        repositoryName:
+          type: string
+          examples:
+          - SNU Open Repository and Archive
+        baseURL:
+          type: string
+          format: uri
+        protocolVersion:
+          type: string
+          const: '2.0'
+        adminEmail:
+          type: string
+          format: email
+        earliestDatestamp:
+          type: string
+          format: date-time
+          examples:
+          - '2008-07-31T15:00:00Z'
+        deletedRecord:
+          type: string
+          enum:
+          - false
+          - persistent
+          - transient
+        granularity:
+          type: string
+          enum:
+          - YYYY-MM-DD
+          - YYYY-MM-DDThh:mm:ssZ
+    OAIError_2:
+      type: object
+      description: OAI-PMH protocol error, returned with HTTP 200.
+      properties:
+        code:
+          type: string
+          enum:
+          - badArgument
+          - badResumptionToken
+          - badVerb
+          - cannotDisseminateFormat
+          - idDoesNotExist
+          - noRecordsMatch
+          - noMetadataFormats
+          - noSetHierarchy
+        message:
+          type: string
+    OAIPMHResponse_2:
+      type: object
+      description: Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/. Modelled structurally; the authoritative definition is the OAI-PMH 2.0 XSD at http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.
+      properties:
+        responseDate:
+          type: string
+          format: date-time
+        request:
+          type: string
+          format: uri
+        error:
+          $ref: '#/components/schemas/OAIError_2'
+        Identify:
+          $ref: '#/components/schemas/Identify_2'
+x-refined-from:
+- snu-kossda-oai-pmh-openapi.yml
+- snu-s-space-oai-pmh-openapi.yml

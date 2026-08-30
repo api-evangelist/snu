@@ -1,0 +1,53 @@
+generated: '2026-08-19'
+method: probed
+source: >-
+  Derived from authentication/snu-authentication.yml and
+  authentication/snu-kafe-saml-idp-metadata.xml, plus negative probes for OAuth/OIDC
+  discovery documents on www.snu.ac.kr and api.snu.ac.kr (2026-08-19).
+description: >-
+  Seoul National University publishes no OAuth 2.0 or OIDC authorization server, so there
+  are no scopes in the OAuth sense and none are invented here. The nearest real
+  equivalent — the attribute-release contract that governs what SNU's Identity Provider
+  discloses about a person to a relying party — is recorded below, because for a
+  university that IS the authorization surface.
+oauth:
+  present: false
+  evidence: >-
+    https://www.snu.ac.kr/.well-known/openid-configuration and
+    /.well-known/oauth-authorization-server both return 404; api.snu.ac.kr returns 403 at
+    the root and 404 on every path probed.
+saml_attribute_release:
+  entity_id: https://kafegw.snu.ac.kr/idp/simplesamlphp
+  scope: snu.ac.kr
+  entity_categories:
+    - id: http://refeds.org/category/research-and-scholarship
+      name: REFEDS Research and Scholarship
+      description: >-
+        By supporting the R&S entity category, SNU's IdP commits to releasing the R&S
+        minimal attribute bundle — persistent non-reassigned identifier, person name,
+        email address, and eduPersonScopedAffiliation — to any R&S-tagged Service
+        Provider in the federation without a bilateral agreement. This is the closest
+        thing SNU operates to a published authorization scope, and it is the mechanism
+        by which an SNU identity works at a research service run by someone else.
+      source: authentication/snu-kafe-saml-idp-metadata.xml
+  assurance:
+    - id: https://refeds.org/sirtfi
+      name: Sirtfi v1
+      description: >-
+        Security Incident Response Trust Framework for Federated Identity. SNU asserts
+        Sirtfi compliance and publishes a security contact (ym0427@snu.ac.kr) in its
+        metadata — a real, machine-readable incident-response commitment.
+      source: authentication/snu-kafe-saml-idp-metadata.xml
+  name_id_formats:
+    - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+  notes: >-
+    Only the transient NameID format is advertised, so SNU does not hand a relying party
+    a stable subject identifier through NameID; persistent correlation, where R&S applies,
+    comes through released attributes instead.
+public_surfaces:
+  - url: https://s-space.snu.ac.kr/oai/request
+    scopes: []
+    note: Anonymous. No authorization model — every record the repository publishes is world-readable.
+  - url: https://kossda.snu.ac.kr/oai/request
+    scopes: []
+    note: Anonymous.
