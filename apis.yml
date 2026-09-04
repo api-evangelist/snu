@@ -53,7 +53,7 @@ accessModel:
     - probed
   generated: '2026-08-19'
   method: probed
-position: Consumer
+position: Consuming
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/snu.png
 url: https://raw.githubusercontent.com/api-evangelist/snu/refs/heads/main/apis.yml
