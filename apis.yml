@@ -159,16 +159,16 @@ apis:
     url: https://doi.org/10.17616/R31NJNSU
   - type: x-OpenSearchDescription
     url: https://s-space.snu.ac.kr/open-search/description.xml
-- aid: snu:snu-opensearch-api
+- aid: snu:snu-open-search-api
   name: Seoul National University Open Search API
   description: OpenSearch 1.1 description and query endpoints.
-  humanURL: https://s-space.snu.ac.kr/
-  baseURL: https://s-space.snu.ac.kr/oai/request
+  humanURL: https://kafegw.snu.ac.kr/
+  baseURL: https://kafegw.snu.ac.kr/saml/module.php/saml/idp/singleSignOnService
   tags:
-  - OpenSearch
+  - Open Search
   properties:
   - type: OpenAPI
-    url: openapi/snu-opensearch-api-openapi.yml
+    url: openapi/snu-open-search-api-openapi.yml
   - type: x-OAI-PMH-Identify
     url: https://s-space.snu.ac.kr/oai/request?verb=Identify
   - type: x-OAI-PMH-MetadataFormats
