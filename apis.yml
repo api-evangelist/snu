@@ -98,6 +98,14 @@ apis:
   - Shibboleth
   - eduGAIN
   - KAFE
+  - SSO
+  - Authentication
+  tags_raw:
+  - SAML
+  - Identity Federation
+  - Shibboleth
+  - eduGAIN
+  - KAFE
   - Single Sign-On
   - Authentication
   properties:
@@ -124,6 +132,13 @@ apis:
   humanURL: https://lib.snu.ac.kr/
   baseURL: https://snu-primo.hosted.exlibrisgroup.com/primo-explore/search?vid=82SNU
   tags:
+  - Library
+  - Discovery
+  - Primo
+  - Alma
+  - Ex Libris
+  - Tenants
+  tags_raw:
   - Library
   - Discovery
   - Primo
@@ -165,6 +180,8 @@ apis:
   humanURL: https://kafegw.snu.ac.kr/
   baseURL: https://kafegw.snu.ac.kr/saml/module.php/saml/idp/singleSignOnService
   tags:
+  - OpenSearch
+  tags_raw:
   - Open Search
   properties:
   - type: OpenAPI
