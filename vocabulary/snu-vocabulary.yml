@@ -1,0 +1,106 @@
+name: Seoul National University
+description: >-
+  Vocabulary of the terms, identifier schemes, and protocol objects an integrator meets
+  when working with Seoul National University's public machine-readable surfaces. Small on
+  purpose: the institution operates three protocol endpoints, not a product, and the
+  vocabulary reflects the protocols plus the Korean higher-education context around them.
+version: '1.0'
+generated: '2026-08-19'
+method: derived
+source: >-
+  Derived from openapi/*.yml, authentication/snu-kafe-saml-idp-metadata.xml and
+  conformance/snu-conformance.yml in this repository, all of which were established by
+  live probe on 2026-08-19.
+created: '2026-08-19'
+modified: '2026-08-19'
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Research Data
+  - Identity Federation
+terms:
+  - term: S-Space
+    korean: 서울대학교 학술연구정보 저장소
+    definition: >-
+      The SNU Open Repository and Archive — Seoul National University's institutional
+      repository for theses, dissertations, journal articles and research outputs, running
+      DSpace 5.5 at s-space.snu.ac.kr with content dating from 2008-07-31.
+    category: Surface
+  - term: KOSSDA
+    korean: 한국사회과학자료원
+    definition: >-
+      Korea Social Science Data Archive, SNU's social-science research data archive
+      (DSpace 5.6, kossda.snu.ac.kr), registered in re3data as r3d100014654. Holds survey
+      and social-science datasets from 2017 onward.
+    category: Surface
+  - term: KAFE
+    definition: >-
+      Korea Access Federation, the national research-and-education identity federation
+      operated under KREONET (registrationAuthority http://kafe.kreonet.net). KAFE is the
+      registrar of SNU's Identity Provider and the route by which it reaches eduGAIN.
+    category: Federation
+  - term: eduGAIN
+    definition: >-
+      The global interfederation service that aggregates national federations' SAML
+      metadata. SNU's IdP appears in the eduGAIN aggregate, which is the only publicly
+      retrievable copy of SNU's SAML metadata.
+    category: Federation
+  - term: Handle
+    definition: >-
+      The persistent identifier scheme both SNU repositories use in place of DOIs.
+      S-Space mints handles under prefix 10371 (https://hdl.handle.net/10371/702);
+      KOSSDA under 20.500.12236. SNU is not a DataCite member and does not mint DOIs.
+    category: Identifier
+  - term: OAI identifier
+    definition: >-
+      The record identifier used in OAI-PMH requests, of the form
+      oai:<repositoryIdentifier>:<handle-suffix> — e.g. oai:s-space.snu.ac.kr:10371/702.
+    category: Identifier
+  - term: Set
+    definition: >-
+      An OAI-PMH selective-harvesting grouping. S-Space exposes over 100, named
+      com_10371_<id> for DSpace communities and col_10371_<id> for collections.
+    category: Protocol Object
+  - term: Harvesting context
+    definition: >-
+      A distinct OAI-PMH base URL applying a different metadata profile to the same
+      repository. S-Space serves three — /oai/request (default), /oai/driver (DRIVER
+      guidelines) and /oai/openaire (OpenAIRE guidelines).
+    category: Protocol Object
+  - term: js-challenge
+    definition: >-
+      The bot-mitigation cookie SNU's repository hosts require. A cold request receives
+      HTTP 200 and an HTML shell carrying a data-token; the token must be replayed as the
+      js-challenge cookie (TTL 1800 seconds) to reach the resource. OAI-PMH paths are
+      exempt; OpenSearch and syndication paths are not.
+    category: Access Control
+  - term: eduPersonScopedAffiliation
+    definition: >-
+      The federated attribute asserting a person's role within a scope, e.g.
+      member@snu.ac.kr. SNU's IdP declares shibmd:Scope snu.ac.kr, which is what makes
+      such an assertion trustworthy to a relying party.
+    category: Identity
+  - term: REFEDS R&S
+    definition: >-
+      Research and Scholarship entity category. SNU's IdP supports it, committing to
+      release a minimal attribute bundle to R&S-tagged services without a bilateral
+      agreement — SNU's de facto published authorization scope.
+    category: Identity
+  - term: Sirtfi
+    definition: >-
+      Security Incident Response Trust Framework for Federated Identity. SNU asserts
+      Sirtfi and publishes a machine-readable security contact in its SAML metadata.
+    category: Identity
+  - term: Ex Libris Alma / Primo
+    definition: >-
+      The library management and discovery platform SNU Library subscribes to, with
+      institution code 82SNU / 82SNU_INST on snu-primo.hosted.exlibrisgroup.com. SNU's
+      data, Ex Libris's contract — a tenancy, not an SNU API.
+    category: Tenancy
+  - term: eTL
+    korean: 서울대학교 New eTL
+    definition: >-
+      SNU's learning management system at etl.snu.ac.kr, hosted on Naver Cloud Platform.
+      Not Moodle, not Canvas; exposes no LTI, no web services API and no public surface.
+    category: Surface

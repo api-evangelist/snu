@@ -1,0 +1,119 @@
+generated: '2026-08-19'
+method: probed
+source: >-
+  Live probes on 2026-08-19 of s-space.snu.ac.kr/oai/*, kossda.snu.ac.kr/oai/*,
+  s-space.snu.ac.kr/open-search/*, and the eduGAIN aggregate metadata at
+  https://mds.edugain.org/edugain-v2.xml (10,566 entities; one carries the snu.ac.kr
+  scope). Scored against the Kin Score `education` regime standards[]. REWARD-ONLY —
+  every `conforms: true` below points at a specific artifact or response captured in
+  this repository. Standards SNU does not implement are recorded as false with the
+  negative probe that established it, so the absence is evidence, not silence.
+regime: education
+regime_id: education
+standards:
+  - id: oai-pmh
+    conforms: true
+    evidence: >-
+      Two independent OAI-PMH 2.0 data providers on SNU's own hosts. S-Space:
+      https://s-space.snu.ac.kr/oai/request?verb=Identify returns protocolVersion 2.0,
+      repositoryName "SNU Open Repository and Archive", repositoryIdentifier
+      s-space.snu.ac.kr, adminEmail s-space@snu.ac.kr, earliestDatestamp
+      2008-07-31T15:00:00Z, granularity YYYY-MM-DDThh:mm:ssZ, twelve metadata formats
+      (oai_dc, qdc, mods, mets, marc, rdf, didl, ore, uketd_dc, xoai, dim, etdms) and
+      over 100 sets, across three contexts (/oai/request, /oai/driver, /oai/openaire).
+      KOSSDA: https://kossda.snu.ac.kr/oai/request?verb=Identify returns
+      repositoryName "한국사회과학자료원 (KOSSDA)", adminEmail kossda@snu.ac.kr,
+      earliestDatestamp 2017-04-09T11:10:50Z, same twelve formats. Captured responses:
+      examples/snu-s-space-oai-identify-example.xml,
+      examples/snu-s-space-oai-listmetadataformats-example.xml,
+      examples/snu-kossda-oai-identify-example.xml.
+    artifacts:
+      - openapi/snu-s-space-oai-pmh-openapi.yml
+      - openapi/snu-kossda-oai-pmh-openapi.yml
+  - id: saml
+    conforms: true
+    evidence: >-
+      SNU operates a SAML 2.0 Identity Provider, entityID
+      https://kafegw.snu.ac.kr/idp/simplesamlphp, published in the eduGAIN interfederation
+      aggregate. IDPSSODescriptor declares protocolSupportEnumeration
+      urn:oasis:names:tc:SAML:2.0:protocol with SingleSignOnService and
+      SingleLogoutService over HTTP-Redirect and HTTP-POST bindings, transient NameID
+      format, and separate signing and encryption X.509 keys issued to
+      CN=kafegw.snu.ac.kr, O=SNU, OU=Information Systems and Technology (valid to
+      2028-06-03). Host kafegw.snu.ac.kr resolves to 147.46.10.201, SNU's own block, and
+      answers 200. Artifact: authentication/snu-kafe-saml-idp-metadata.xml.
+    artifacts:
+      - authentication/snu-kafe-saml-idp-metadata.xml
+  - id: shibboleth
+    conforms: true
+    evidence: >-
+      The IdP's metadata carries the Shibboleth metadata extension
+      urn:mace:shibboleth:metadata:1.0 with <shibmd:Scope regexp="false">snu.ac.kr</shibmd:Scope>,
+      the scoped-affiliation assertion the Shibboleth ecosystem relies on. Recorded
+      honestly: the implementation is SimpleSAMLphp, not the Shibboleth IdP software —
+      the conformance is to the Shibboleth metadata profile, not to the product.
+    artifacts:
+      - authentication/snu-kafe-saml-idp-metadata.xml
+  - id: opensearch
+    conforms: true
+    evidence: >-
+      https://s-space.snu.ac.kr/open-search/description.xml returns
+      application/opensearchdescription+xml with an OpenSearch 1.1 OpenSearchDescription
+      (LongName "SNU Open Repository and Archive"); /open-search/ answers in Atom and
+      RSS 2.0 with opensearch: namespace annotations. Conditional: reachable only after
+      replaying the site's js-challenge cookie — see coverage. Not an `education` regime
+      standard; recorded because it is a real machine-readable contract.
+    artifacts:
+      - openapi/snu-s-space-opensearch-openapi.yml
+  - id: scim
+    conforms: false
+    evidence: >-
+      No SCIM 2.0 service provider found. https://api.snu.ac.kr/ answers 403 at the root
+      and 404 on /v1, /api, /scim-adjacent paths; no /ServiceProviderConfig anywhere on
+      snu.ac.kr surfaces probed.
+  - id: lti
+    conforms: false
+    evidence: >-
+      SNU's LMS is eTL (https://etl.snu.ac.kr, CNAME to Naver Cloud Platform gov LB). It
+      is not Moodle and not Canvas — zero "moodle" strings in the served HTML, and
+      /mod/lti/auth.php, /mod/lti/token.php, /mod/lti/certs.php and
+      /.well-known/lti-configuration all return 404. No LTI 1.3 platform or tool
+      registration is publicly discoverable.
+  - id: oneroster
+    conforms: false
+    evidence: No IMS OneRoster endpoint found on any snu.ac.kr host probed.
+  - id: ed-fi
+    conforms: false
+    evidence: Ed-Fi is a US K-12 data standard; not applicable to a Korean university and not found.
+  - id: caliper
+    conforms: false
+    evidence: No IMS Caliper Analytics event store or sensor endpoint found on etl.snu.ac.kr or elsewhere.
+  - id: qti
+    conforms: false
+    evidence: No QTI assessment interchange surface found.
+  - id: orcid
+    conforms: false
+    evidence: >-
+      Negative probe against real data, not a guess: a full ListRecords page of
+      oai_dc records from S-Space (228 KB, harvested 2026-08-19) contains zero
+      occurrences of "orcid". Creator fields carry names only. No ORCID member API
+      integration is publicly visible.
+  - id: datacite
+    conforms: false
+    evidence: >-
+      https://api.datacite.org/providers?query=Seoul%20National%20University returns
+      {"data":[],"meta":{"total":0}} — SNU is not a DataCite provider or client. S-Space
+      identifiers are Handle System handles under prefix 10371
+      (https://hdl.handle.net/10371/702); KOSSDA uses prefix 20.500.12236. Handles, not DOIs.
+  - id: crossref
+    conforms: false
+    evidence: >-
+      Same ListRecords sample contains zero occurrences of "doi.org". No Crossref
+      deposit surface or DOI minting is visible from the repository metadata.
+notes: >-
+  The two conformances that matter here are the two nobody had catalogued: an OAI-PMH
+  data provider SNU actually runs (two of them), and a SAML identity provider that is
+  registered in eduGAIN and therefore machine-readable by definition. Neither is a vendor
+  contract wearing SNU's name — the OAI endpoints answer from SNU's own address block
+  with SNU's own admin contacts, and the IdP's certificates are issued to SNU's own
+  Information Systems and Technology office.

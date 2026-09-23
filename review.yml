@@ -3,8 +3,151 @@ name: Seoul National University
 description: Seoul National University public developer/API footprint review for APIs.json cataloging.
 url: https://raw.githubusercontent.com/api-evangelist/snu/refs/heads/main/review.yml
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-08-19'
 reviews:
+  - date: '2026-08-19'
+    rating: 3
+    summary: >-
+      Re-profiled under the university pipeline, which settles WHO OPERATES each surface
+      before saving anything. Four institution-operated machine-readable surfaces were
+      verified on SNU's own hosts and address block, three of them never previously
+      catalogued: a second OAI-PMH 2.0 repository (KOSSDA, SNU's social science data
+      archive), an OpenSearch 1.1 interface over S-Space, and — the significant find — a
+      SAML 2.0 Identity Provider registered in the KAFE national federation and exported
+      into eduGAIN, carrying REFEDS Research & Scholarship support and a Sirtfi assurance
+      assertion. One tenancy was recorded rather than misattributed: SNU Library runs Ex
+      Libris Alma and Primo under institution code 82SNU, which is SNU's data on Ex
+      Libris's contract, so no Ex Libris specification was saved here. Two corrections to
+      the 2026-06-03 review are carried below. Seventy-plus URLs were probed in Korean and
+      English; the negatives are recorded as evidence, not silence.
+    corrections:
+      - claim: >-
+          2026-06-03 recorded "The DSpace REST API (/server/api, /rest) is present but
+          returned HTTP 403 to scripted access, so it is not cataloged as a usable public API."
+        finding: >-
+          Wrong on both counts. The 403 was a JavaScript bot challenge, not an access
+          control, and behind the challenge cookie both paths return HTTP 404 from the
+          DSpace 5.5 "Document Not Found" page. There is no DSpace REST API deployed at
+          all. Absent, not gated — the distinction matters because "gated" implies
+          something an integrator could ask for.
+      - claim: 2026-06-03 recorded S-Space as SNU's primary and effectively only machine-readable footprint.
+        finding: >-
+          Understated by three surfaces. S-Space also serves OpenSearch 1.1 and two
+          additional OAI-PMH harvesting contexts (DRIVER, OpenAIRE); KOSSDA is a second
+          independent OAI-PMH repository on kossda.snu.ac.kr; and SNU operates a federated
+          SAML identity provider that is machine-readable by definition.
+    endpoints:
+      - url: https://s-space.snu.ac.kr/oai/request?verb=Identify
+        status: 200
+        note: Live OAI-PMH 2.0, anonymous, no bot challenge. repositoryName "SNU Open Repository and Archive"; adminEmail s-space@snu.ac.kr.
+      - url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
+        status: 200
+        note: 'Twelve formats: oai_dc, qdc, mods, mets, marc, rdf, didl, ore, uketd_dc, xoai, dim, etdms.'
+      - url: https://s-space.snu.ac.kr/oai/request?verb=ListSets
+        status: 200
+        note: Over 100 sets, com_10371_* communities and col_10371_* collections.
+      - url: https://s-space.snu.ac.kr/oai/driver?verb=Identify
+        status: 200
+        note: DRIVER guidelines harvesting context.
+      - url: https://s-space.snu.ac.kr/oai/openaire?verb=Identify
+        status: 200
+        note: OpenAIRE guidelines harvesting context.
+      - url: https://s-space.snu.ac.kr/open-search/description.xml
+        status: 200
+        note: >-
+          OpenSearch 1.1 description, application/opensearchdescription+xml — but only
+          with the js-challenge cookie replayed. Cold, the same 200 returns a 1,004-byte
+          HTML challenge shell. Soft-200; graded gated, not open.
+      - url: https://s-space.snu.ac.kr/rest
+        status: 404
+        note: Behind the challenge cookie. Corrects the 2026-06-03 403 finding — no REST API exists.
+      - url: https://s-space.snu.ac.kr/server/api
+        status: 404
+        note: DSpace 7 path absent; this deployment is DSpace 5.5.
+      - url: https://kossda.snu.ac.kr/oai/request?verb=Identify
+        status: 200
+        note: >-
+          NEW. KOSSDA (한국사회과학자료원), SNU's social science data archive. DSpace 5.6,
+          adminEmail kossda@snu.ac.kr, earliest datestamp 2017-04-09. Required a 120s read
+          timeout; failed at 30s and 45s.
+      - url: https://mds.edugain.org/edugain-v2.xml
+        status: 200
+        note: >-
+          NEW. eduGAIN aggregate, 92.9 MB, 10,566 entities. Exactly one carries scope
+          snu.ac.kr — SNU's SAML 2.0 IdP, entityID https://kafegw.snu.ac.kr/idp/simplesamlphp,
+          registered by KAFE 2024-06-25, REFEDS R&S, Sirtfi, certs to 2028-06-03.
+      - url: https://kafegw.snu.ac.kr/
+        status: 200
+        note: IdP host live on 147.46.10.201, SNU's own address block.
+      - url: https://kafegw.snu.ac.kr/saml/module.php/saml/idp/metadata.php
+        status: 500
+        note: SNU does not serve its own SAML metadata; the federation aggregate is the only retrievable copy.
+      - url: https://kafegw.snu.ac.kr/idp/simplesamlphp
+        status: 404
+        note: The published entityID does not dereference.
+      - url: http://en.snu.ac.kr/upload/footer/privacy.pdf
+        status: 404
+        note: >-
+          Dead pointer inside SNU's own SAML metadata (mdui:PrivacyStatementURL). A
+          federation partner following SNU's declared privacy statement gets nothing.
+      - url: https://www.kafe.or.kr/kafe-mrps-v1.1.pdf
+        status: 200
+        note: Soft-404 — 10,732 bytes of KAFE homepage HTML, not a PDF. KAFE's defect, in SNU's metadata chain.
+      - url: https://snu-primo.hosted.exlibrisgroup.com/primo-explore/search?vid=82SNU
+        status: 200
+        note: >-
+          TENANT. Confirmed from lib.snu.ac.kr's own homepage, which links search, journal
+          search, thesis search and full-display into this host and pulls thumbnails from
+          ap01.alma.exlibrisgroup.com. Recorded as a tenancy; no Ex Libris spec saved here.
+      - url: https://lib.snu.ac.kr/wp-json/
+        status: 401
+        note: WordPress REST API present but locked (rest_not_logged_in).
+      - url: https://api.snu.ac.kr/
+        status: 403
+        note: >-
+          Host exists on SNU's block (147.46.10.189); /v1, /api, /docs, /swagger, /health,
+          /openapi.json and /status all 404. Not an API gateway despite the hostname.
+      - url: https://data.snu.ac.kr/
+        status: 200
+        note: Data Science & AI Laboratory website, not an open-data portal. No CKAN or Socrata anywhere on snu.ac.kr.
+      - url: https://etl.snu.ac.kr/mod/lti/token.php
+        status: 404
+        note: >-
+          LMS is neither Moodle nor Canvas (zero "moodle" strings served); no LTI
+          endpoints. /theme/ and /local/ return soft-404s with the same 850-byte body.
+      - url: https://dcollection.snu.ac.kr/oai/request?verb=Identify
+        status: 200
+        note: Soft-404 — returns dCollection HTML, not OAI-PMH XML. No harvesting surface.
+      - url: https://api.datacite.org/providers?query=Seoul%20National%20University
+        status: 200
+        note: Zero results. Not a DataCite member; repositories mint Handles (10371, 20.500.12236), not DOIs.
+      - url: https://www.snu.ac.kr/.well-known/security.txt
+        status: 404
+        note: No security.txt. https://www.snu.ac.kr/llms.txt also 404.
+      - url: https://www.snu.ac.kr/robots.txt
+        status: 200
+        note: Blocks 20+ named crawlers including Applebot and Amazonbot.
+      - url: https://api.github.com/orgs/snu
+        status: 404
+        note: No official SNU GitHub organization; only lab-level orgs. No GitHubOrganization pointer claimed.
+      - url: https://www.snu.ac.kr/about/downloads?md=v&bbsidx=166508
+        status: 200
+        note: 「서울대학교 AI 가이드라인」 — the institutional AI guidelines, Korean surface. AIPolicy.
+      - url: https://www.snu.ac.kr/snunow/press?md=v&bbsidx=170942
+        status: 200
+        note: >-
+          SNU "AI Native Campus" announcement — ChatGPT Edu provided to all current
+          students and staff, June 2026 to August 2027, authenticated with SNU Portal
+          credentials. AITooling.
+      - url: https://en.snu.ac.kr/privacy-policy
+        status: 200
+        note: Live English privacy policy — the working replacement for the dead PDF in the SAML metadata.
+      - url: https://ist.snu.ac.kr/
+        status: 200
+        note: 정보화본부, SNU Office of Information Systems and Technology — the operator of the IdP. Support pointer.
+      - url: https://www.linkedin.com/school/seoulnational-university
+        status: 999
+        note: LinkedIn anti-bot status, not a dead pointer. Graded live.
   - date: '2026-06-03'
     rating: 2
     summary: >-
@@ -16,6 +159,7 @@ reviews:
       (/server/api and /rest) returned HTTP 403, indicating it is gated/blocked
       to scripted access, so it was not cataloged as a usable public API. No
       endpoints were fabricated; only confirmed URLs and statuses are recorded.
+      SUPERSEDED 2026-08-19 — see the corrections on that review.
     endpoints:
       - url: https://s-space.snu.ac.kr/oai/request?verb=Identify
         status: 200
@@ -25,13 +169,13 @@ reviews:
         note: Returns oai_dc, qdc, mods, mets, marc, rdf, didl, ore, uketd_dc, xoai.
       - url: https://s-space.snu.ac.kr/server/api
         status: 403
-        note: DSpace REST API present but blocked to scripted access; not cataloged.
+        note: SUPERSEDED — the 403 was a bot challenge; the path 404s behind the challenge cookie.
       - url: https://s-space.snu.ac.kr/rest
         status: 403
-        note: Legacy DSpace REST path also returns forbidden.
+        note: SUPERSEDED — same. No DSpace REST API is deployed.
       - url: https://s-space.snu.ac.kr/
         status: 403
-        note: S-Space web UI forbids non-browser requests; OAI endpoint remains open.
+        note: SUPERSEDED — JavaScript bot challenge, now returns 200 with a challenge shell.
       - url: https://en.snu.ac.kr/
         status: 200
         note: Official English website, live.

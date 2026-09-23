@@ -3,9 +3,7 @@ info:
   title: SNU S-Space Interface Open Search API
   version: '1.1'
   summary: OpenSearch 1.1 search interface over the SNU Open Repository and Archive.
-  description: 'S-Space serves an OpenSearch 1.1 description document at /open-search/description.xml and answers queries at /open-search/ in Atom, RSS 2.0 or HTML. This is a genuine machine-readable search surface on Seoul National University''s own host, and it is the only keyword-search API the institution operates.
-
-    It carries one significant caveat that must not be papered over. Unlike the OAI-PMH endpoints, /open-search/ sits BEHIND the JavaScript interstitial challenge that fronts s-space.snu.ac.kr. A client without a browser receives HTTP 200 and a ~1 KB HTML shell containing a `js-challenge` token, not search results — a textbook soft-200. Real results require replaying that token as a `js-challenge` cookie. Every example in this contract was captured that way. Treat this surface as GATED, not open: the status code says 200, the payload says no.'
+  description: S-Space serves an OpenSearch 1.1 description document at /open-search/description.xml and answers queries at /open-search/ in Atom, RSS 2.0 or HTML.
   x-generated: '2026-08-19'
   x-method: probed
   x-operator: institution
@@ -23,13 +21,13 @@ servers:
 security:
 - jsChallengeCookie: []
 tags:
-- name: OpenSearch
+- name: Open Search
   description: OpenSearch 1.1 description and query endpoints.
 paths:
   /open-search/description.xml:
     get:
       tags:
-      - OpenSearch
+      - Open Search
       operationId: getOpenSearchDescription
       summary: Retrieve the OpenSearch 1.1 description document
       description: Returns the OpenSearchDescription document advertising the query templates. Requires the js-challenge cookie; without it the response is a 200 HTML shell.
@@ -54,7 +52,7 @@ paths:
   /open-search/:
     get:
       tags:
-      - OpenSearch
+      - Open Search
       operationId: openSearchQuery
       summary: Search the repository
       description: Keyword search across S-Space items, returning an OpenSearch-annotated Atom or RSS feed. Requires the js-challenge cookie.

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="static/style.xsl"?><OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"><responseDate>2026-08-19T21:57:07Z</responseDate><request verb="GetRecord" identifier="oai:s-space.snu.ac.kr:10371/702" metadataPrefix="oai_dc">https://s-space.snu.ac.kr/oai/request</request><GetRecord><record><header><identifier>oai:s-space.snu.ac.kr:10371/702</identifier><datestamp>2023-05-10T18:00:04Z</datestamp><setSpec>com_10371_646</setSpec><setSpec>com_10371_333</setSpec><setSpec>col_10371_647</setSpec></header><metadata><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:doc="http://www.lyncode.com/xoai" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+<dc:title>도서관이용 패러다임 변화에 따른 이용자중심 서비스 운영전략</dc:title>
+<dc:creator>김미향</dc:creator>
+<dc:contributor>KIM, Mihyang</dc:contributor>
+<dc:subject>VOD</dc:subject>
+<dc:subject>Academic Events</dc:subject>
+<dc:description>서울대 학술행사VOD 콘텐츠에 대한 분석 및 연구자료</dc:description>
+<dc:description>최근 대학도서관 주변 환경이 급격히 변화하고 있고, 가장 큰 요인은 정보기술의 획기적인 발전&#xd;
+이겠다. 이외에도 이외에도 대학 자체의 경쟁력 강화 또는 법인화 논의까지 이루어지면서 대학도&#xd;
+서관은 변화하지 않으면 안 될 국면에 처해 있다.&#xd;
+이러한 대내외적인 환경의 변화는 대학도서관의 양질의 신속하고 유연성 있는 서비스를 요구하&#xd;
+고 있으며, 이를 위해서 대학도서관의 조직과 운영 전략의 변화가 필요하게 되었다. 구체적으로 대&#xd;
+학도서관의 대내외적인 환경의 변화를 살펴보면, 첫째, 도서관자동화시스템과 Database 산업의 발&#xd;
+달은 도서관업무에 많은 영향을 주었다. 일례로 상업적인 MARC Database의 확산으로 분류와 목&#xd;
+록업무의 양이 대폭 줄어들었고, 국내 서점에 도서 구매시 구매도서의 MARC 데이터까지 납품하&#xd;
+도록 하고 수서와 목록시스템이 통합 운영되면서 분류와 목록작성과 같은 기술업무에 들이던 노력&#xd;
+을 이용자서비스 부분으로 활용할 수 있게 되었다.&#xd;
+둘째, 대학도서관에서 구입 또는 구축한 온라인 정보자원이 매우 다양해졌다. 대학도서관은 좋은 수많은 온라인정보 중에서 적절한 선택을 해야 함은 물론이고 필요한 정보는 디지털화하여 구축해&#xd;
+야 한다. 이외에도 이러한 다양한 효율적으로 관리해야 하고 이용자 정보요구에 초점을 맞추는 맞&#xd;
+춤형 서비스를 지향함으로 이용자의 만족도를 높여야 한다. Database를 구입하기 전에 이용자의&#xd;
+편에 서서 이를 평가해야 하며 이용자와 접촉할 수 있는 기회를 확대해 이용자가 원하는 사항을&#xd;
+정확히 파악하고 이를 분석해 업무에 반영해야 할 것이다. 사서를 이용자에 보다 가까이 배치하고&#xd;
+이용자의 눈높이에서 서비스하는 것만이 이용자의 만족도를 높이는 지름길이다...</dc:description>
+<dc:date>2008-12-16T06:02:01Z</dc:date>
+<dc:date>2008-12-16T06:02:01Z</dc:date>
+<dc:date>2007-03</dc:date>
+<dc:type>Article</dc:type>
+<dc:identifier>국립대학도서관보 제25집</dc:identifier>
+<dc:identifier>https://hdl.handle.net/10371/702</dc:identifier>
+<dc:language>ko</dc:language>
+<dc:relation>25</dc:relation>
+<dc:publisher>국립대학도서관협의회</dc:publisher>
+</oai_dc:dc>
+</metadata></record></GetRecord></OAI-PMH>

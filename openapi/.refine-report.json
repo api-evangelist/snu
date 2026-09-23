@@ -1,0 +1,32 @@
+{
+  "provider": "snu",
+  "sources": [
+    "_original/snu-kossda-oai-pmh-openapi-original.yml",
+    "_original/snu-s-space-opensearch-openapi-original.yml"
+  ],
+  "outputs": [
+    "snu-oai-pmh-api-openapi.yml",
+    "snu-opensearch-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "4 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "snu-kossda-oai-pmh-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "snu-s-space-opensearch-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "superseded outputs removed: snu-open-search-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 4 total)"
+  ],
+  "skipped": [
+    "_original/snu-s-space-opensearch-openapi.yml: archived document superseded by a larger archived document",
+    "_original/snu-s-space-oai-pmh-openapi.yml: archived document superseded by a larger archived document",
+    "_original/snu-s-space-oai-pmh-openapi-original.yml: archived document superseded by a larger archived document",
+    "_original/snu-kossda-oai-pmh-openapi.yml: archived document superseded by a larger archived document",
+    "snu-oai-pmh-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "snu-open-search-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

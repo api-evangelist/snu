@@ -1,52 +1,111 @@
 {
   "@context": {
+    "@version": 1.1,
     "schema": "https://schema.org/",
-    "snu": "https://en.snu.ac.kr/vocab#",
+    "snu": "https://www.snu.ac.kr/vocab#",
     "dc": "http://purl.org/dc/elements/1.1/",
     "oai": "http://www.openarchives.org/OAI/2.0/",
+    "opensearch": "http://a9.com/-/spec/opensearch/1.1/",
+    "md": "urn:oasis:names:tc:SAML:2.0:metadata#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
     "name": "schema:name",
-    "url": "schema:url",
+    "url": { "@id": "schema:url", "@type": "@id" },
     "description": "schema:description",
-    "sameAs": "schema:sameAs",
-    "foundingDate": "schema:foundingDate",
+    "sameAs": { "@id": "schema:sameAs", "@type": "@id" },
+    "identifier": "schema:identifier",
+    "foundingDate": { "@id": "schema:foundingDate", "@type": "xsd:date" },
     "address": "schema:address",
+    "email": "schema:email",
     "Organization": "schema:CollegeOrUniversity",
-    "repository": {
-      "@id": "snu:repository",
-      "@type": "@id"
-    },
-    "baseURL": {
-      "@id": "snu:baseURL",
-      "@type": "@id"
-    },
+    "operator": { "@id": "snu:operator", "@type": "@id" },
+    "operatorClass": "snu:operatorClass",
+    "surface": { "@id": "snu:surface", "@type": "@id" },
+    "repository": { "@id": "snu:repository", "@type": "@id" },
+    "baseURL": { "@id": "snu:baseURL", "@type": "@id" },
+    "protocol": "snu:protocol",
     "protocolVersion": "snu:protocolVersion",
     "metadataFormat": "snu:metadataFormat",
-    "earliestDatestamp": {
-      "@id": "snu:earliestDatestamp",
-      "@type": "schema:Date"
-    },
+    "earliestDatestamp": { "@id": "snu:earliestDatestamp", "@type": "xsd:dateTime" },
+    "software": "snu:software",
+    "entityID": { "@id": "md:entityID", "@type": "@id" },
+    "singleSignOnService": { "@id": "md:SingleSignOnService", "@type": "@id" },
+    "scope": "snu:scope",
+    "federation": "snu:federation",
     "record": "snu:record",
-    "identifier": "dc:identifier",
     "creator": "dc:creator",
     "title": "dc:title",
     "subject": "dc:subject",
-    "date": {
-      "@id": "dc:date",
-      "@type": "schema:Date"
-    },
+    "date": { "@id": "dc:date", "@type": "xsd:date" },
     "publisher": "dc:publisher",
     "type": "dc:type"
   },
   "@type": "Organization",
   "name": "Seoul National University",
-  "url": "https://en.snu.ac.kr/",
-  "description": "South Korea's flagship national research university, located in Seoul.",
+  "url": "https://www.snu.ac.kr/",
+  "identifier": "https://ror.org/04h9pn542",
+  "description": "South Korea's flagship national research university. Its public machine-readable footprint is three protocol endpoints on its own hosts — two OAI-PMH repositories, one OpenSearch interface — plus a SAML 2.0 identity provider registered in eduGAIN. It publishes no developer portal and no open-data API.",
   "sameAs": [
-    "https://www.linkedin.com/school/seoulnational-university",
-    "https://en.snu.ac.kr/"
+    "https://en.snu.ac.kr/",
+    "https://ror.org/04h9pn542",
+    "https://www.linkedin.com/school/seoulnational-university"
   ],
-  "repository": "https://s-space.snu.ac.kr/",
-  "baseURL": "https://s-space.snu.ac.kr/oai/request",
-  "protocolVersion": "2.0",
-  "earliestDatestamp": "2008-07-31"
+  "surface": [
+    {
+      "@type": "snu:MachineReadableSurface",
+      "name": "S-Space OAI-PMH Repository Interface",
+      "operatorClass": "institution",
+      "protocol": "OAI-PMH",
+      "protocolVersion": "2.0",
+      "baseURL": "https://s-space.snu.ac.kr/oai/request",
+      "repository": "https://s-space.snu.ac.kr/",
+      "software": "DSpace 5.5",
+      "email": "s-space@snu.ac.kr",
+      "earliestDatestamp": "2008-07-31T15:00:00Z",
+      "metadataFormat": ["oai_dc", "qdc", "mods", "mets", "marc", "rdf", "didl", "ore", "uketd_dc", "xoai", "dim", "etdms"]
+    },
+    {
+      "@type": "snu:MachineReadableSurface",
+      "name": "KOSSDA OAI-PMH Repository Interface",
+      "operatorClass": "institution",
+      "protocol": "OAI-PMH",
+      "protocolVersion": "2.0",
+      "baseURL": "https://kossda.snu.ac.kr/oai/request",
+      "repository": "https://kossda.snu.ac.kr/",
+      "software": "DSpace 5.6",
+      "email": "kossda@snu.ac.kr",
+      "earliestDatestamp": "2017-04-09T11:10:50Z",
+      "sameAs": "https://doi.org/10.17616/R31NJNSU"
+    },
+    {
+      "@type": "snu:MachineReadableSurface",
+      "name": "S-Space OpenSearch Interface",
+      "operatorClass": "institution",
+      "protocol": "OpenSearch",
+      "protocolVersion": "1.1",
+      "baseURL": "https://s-space.snu.ac.kr/open-search/",
+      "description": "Gated behind a JavaScript bot challenge; a cold machine client receives HTTP 200 and an HTML shell."
+    },
+    {
+      "@type": "snu:MachineReadableSurface",
+      "name": "Seoul National University Identity Provider",
+      "operatorClass": "institution",
+      "protocol": "SAML",
+      "protocolVersion": "2.0",
+      "entityID": "https://kafegw.snu.ac.kr/idp/simplesamlphp",
+      "singleSignOnService": "https://kafegw.snu.ac.kr/saml/module.php/saml/idp/singleSignOnService",
+      "scope": "snu.ac.kr",
+      "federation": ["KAFE", "eduGAIN"],
+      "software": "SimpleSAMLphp",
+      "email": "ercc_infra@snu.ac.kr"
+    },
+    {
+      "@type": "snu:MachineReadableSurface",
+      "name": "SNU Library discovery (Ex Libris Primo / Alma)",
+      "operatorClass": "tenant",
+      "operator": "https://exlibrisgroup.com/",
+      "url": "https://snu-primo.hosted.exlibrisgroup.com/primo-explore/search?vid=82SNU",
+      "identifier": "82SNU_INST",
+      "description": "SNU's library data on Ex Libris's platform and contract. The tenancy is SNU's; the API is not."
+    }
+  ]
 }

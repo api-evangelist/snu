@@ -1,0 +1,62 @@
+generated: '2026-08-19'
+method: probed
+source: >-
+  Every file in this directory is a verbatim, unedited HTTP response body captured from a
+  Seoul National University host on 2026-08-19. Nothing here was written by hand,
+  synthesised, or trimmed. The only file that was touched is the SAML metadata in
+  authentication/, which had namespace declarations lifted onto it so the fragment stands
+  alone — and that is stated in the file's own header.
+description: >-
+  Captured responses backing the probed OpenAPI contracts in openapi/. They exist so that
+  no claim in this repository rests on assertion: each contract's examples point here by
+  externalValue, and each file below can be re-fetched from the URL recorded against it.
+examples:
+  - file: snu-s-space-oai-identify-example.xml
+    url: https://s-space.snu.ac.kr/oai/request?verb=Identify
+    status: 200
+    content_type: application/xml;charset=UTF-8
+    bytes: 1289
+    access: anonymous, no bot challenge
+    note: Establishes repositoryName, repositoryIdentifier s-space.snu.ac.kr, adminEmail s-space@snu.ac.kr, earliestDatestamp 2008-07-31.
+  - file: snu-s-space-oai-listmetadataformats-example.xml
+    url: https://s-space.snu.ac.kr/oai/request?verb=ListMetadataFormats
+    status: 200
+    content_type: application/xml;charset=UTF-8
+    bytes: 3078
+    access: anonymous, no bot challenge
+    note: The twelve metadata prefixes enumerated in the OpenAPI verb parameter.
+  - file: snu-s-space-oai-getrecord-example.xml
+    url: 'https://s-space.snu.ac.kr/oai/request?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:s-space.snu.ac.kr:10371/702'
+    status: 200
+    content_type: application/xml;charset=UTF-8
+    bytes: 4014
+    access: anonymous, no bot challenge
+    note: >-
+      A real oai_dc record. Backs json-schema/snu-oai-record.json, and is the evidence for
+      the ORCID and Crossref negatives in conformance — identifiers are Handles, creators
+      are bare names.
+  - file: snu-kossda-oai-identify-example.xml
+    url: https://kossda.snu.ac.kr/oai/request?verb=Identify
+    status: 200
+    content_type: application/xml;charset=UTF-8
+    bytes: 1294
+    access: anonymous, no bot challenge; required a 120s read timeout
+    note: >-
+      Establishes KOSSDA as an SNU-operated repository (adminEmail kossda@snu.ac.kr) and
+      shows the http:// baseURL defect recorded in the contract.
+  - file: snu-s-space-opensearch-description-example.xml
+    url: https://s-space.snu.ac.kr/open-search/description.xml
+    status: 200
+    content_type: application/opensearchdescription+xml;charset=UTF-8
+    bytes: 1035
+    access: >-
+      REQUIRED the js-challenge cookie. A cold request to this same URL returns 200 with a
+      1,004-byte HTML challenge shell instead.
+    note: OpenSearch 1.1 description, LongName "SNU Open Repository and Archive".
+  - file: snu-s-space-opensearch-atom-example.xml
+    url: https://s-space.snu.ac.kr/open-search/?query=climate&rpp=2&format=atom
+    status: 200
+    content_type: application/atom+xml;charset=UTF-8
+    bytes: 3391
+    access: REQUIRED the js-challenge cookie.
+    note: 'A real search response with opensearch: namespace annotations.'

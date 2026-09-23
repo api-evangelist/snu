@@ -1,0 +1,207 @@
+# generated: '2026-08-19'
+# method: probed
+# source: Live probes of https://s-space.snu.ac.kr/oai/request (verb=Identify,
+#   ListMetadataFormats, ListSets, ListRecords, GetRecord) on 2026-08-19, plus the
+#   OAI-PMH 2.0 specification (https://www.openarchives.org/OAI/openarchivesprotocol.html).
+#   SNU publishes no OpenAPI for this surface; this contract is derived from observed
+#   request/response behaviour of SNU's own deployment, not from a vendor document.
+# x-operator: institution
+openapi: 3.1.0
+info:
+  title: SNU S-Space OAI-PMH Repository Interface
+  version: '2.0'
+  summary: OAI-PMH 2.0 metadata harvesting interface for the SNU Open Repository and Archive.
+  description: >-
+    S-Space is the Seoul National University Open Repository and Archive, a DSpace 5.5
+    institutional repository operated by SNU on snu.ac.kr infrastructure
+    (147.46.181.99, SNU's own address block). It exposes a standards-compliant OAI-PMH
+    2.0 data provider over three harvesting contexts — the default `/oai/request`, the
+    DRIVER context `/oai/driver`, and the OpenAIRE context `/oai/openaire` — all of which
+    return the same repositoryName "SNU Open Repository and Archive", the same
+    repositoryIdentifier `s-space.snu.ac.kr`, and an earliestDatestamp of 2008-07-31.
+
+    This contract was written from live probes, not from a published specification: SNU
+    does not publish an OpenAPI, a developer portal, or written API documentation for
+    S-Space. The OAI-PMH endpoints are deliberately exempted from the JavaScript
+    interstitial challenge that fronts the rest of s-space.snu.ac.kr, so a harvester with
+    no browser can reach them directly — which is the correct operational choice for a
+    harvesting surface and is worth stating plainly.
+  x-generated: '2026-08-19'
+  x-method: probed
+  x-operator: institution
+  x-source: >-
+    Live probes of https://s-space.snu.ac.kr/oai/request, /oai/driver and /oai/openaire (verbs
+    Identify, ListMetadataFormats, ListSets, ListRecords, GetRecord) on 2026-08-19, plus the
+    OAI-PMH 2.0 specification. SNU publishes no OpenAPI for this surface.
+  contact:
+    name: S-Space Administrator, Seoul National University
+    email: s-space@snu.ac.kr
+    url: https://s-space.snu.ac.kr/
+  license:
+    name: Not stated
+    identifier: NOASSERTION
+servers:
+  - url: https://s-space.snu.ac.kr/oai/request
+    description: Default OAI-PMH context (oai_dc and 11 other metadata formats).
+  - url: https://s-space.snu.ac.kr/oai/driver
+    description: DRIVER guidelines harvesting context.
+  - url: https://s-space.snu.ac.kr/oai/openaire
+    description: OpenAIRE guidelines harvesting context.
+tags:
+  - name: OAI-PMH
+    description: Open Archives Initiative Protocol for Metadata Harvesting 2.0 verbs.
+paths:
+  /:
+    get:
+      tags: [OAI-PMH]
+      operationId: oaiRequest
+      summary: Issue an OAI-PMH 2.0 request
+      description: >-
+        Single-endpoint protocol. The `verb` parameter selects the operation; the
+        remaining parameters are conditional on the verb, per OAI-PMH 2.0. All responses
+        are `application/xml` rooted at `<OAI-PMH>`; protocol-level failures are reported
+        in an `<error>` element with HTTP 200, not with an HTTP error status.
+      parameters:
+        - name: verb
+          in: query
+          required: true
+          description: The OAI-PMH verb to execute.
+          schema:
+            type: string
+            enum:
+              - Identify
+              - ListMetadataFormats
+              - ListSets
+              - ListIdentifiers
+              - ListRecords
+              - GetRecord
+        - name: metadataPrefix
+          in: query
+          required: false
+          description: >-
+            Metadata format to return. Required for ListIdentifiers, ListRecords and
+            GetRecord. Twelve formats were confirmed live on 2026-08-19.
+          schema:
+            type: string
+            enum: [oai_dc, qdc, mods, mets, marc, rdf, didl, ore, uketd_dc, xoai, dim, etdms]
+        - name: identifier
+          in: query
+          required: false
+          description: OAI identifier of a single record. Required for GetRecord.
+          schema:
+            type: string
+            examples: ['oai:s-space.snu.ac.kr:10371/702']
+        - name: set
+          in: query
+          required: false
+          description: >-
+            Set to restrict the harvest to. S-Space exposes over 100 sets named
+            `com_10371_<id>` (communities) and `col_10371_<id>` (collections).
+          schema:
+            type: string
+            examples: ['com_10371_29']
+        - name: from
+          in: query
+          required: false
+          description: Lower bound on record datestamp. Granularity YYYY-MM-DDThh:mm:ssZ.
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          required: false
+          description: Upper bound on record datestamp. Granularity YYYY-MM-DDThh:mm:ssZ.
+          schema:
+            type: string
+            format: date-time
+        - name: resumptionToken
+          in: query
+          required: false
+          description: >-
+            Flow-control token returned by an incomplete list response. Exclusive of all
+            other parameters except `verb`.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            An OAI-PMH response document. A protocol error (badVerb, badArgument,
+            cannotDisseminateFormat, idDoesNotExist, noRecordsMatch, noSetHierarchy,
+            badResumptionToken) is also returned with status 200 inside an `<error>`
+            element.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OAIPMHResponse'
+              examples:
+                identify:
+                  summary: verb=Identify (captured live 2026-08-19)
+                  externalValue: ../examples/snu-s-space-oai-identify-example.xml
+                listMetadataFormats:
+                  summary: verb=ListMetadataFormats (captured live 2026-08-19)
+                  externalValue: ../examples/snu-s-space-oai-listmetadataformats-example.xml
+                getRecord:
+                  summary: verb=GetRecord (captured live 2026-08-19)
+                  externalValue: ../examples/snu-s-space-oai-getrecord-example.xml
+components:
+  schemas:
+    OAIPMHResponse:
+      type: object
+      description: >-
+        Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/.
+        Modelled structurally; the authoritative definition is the OAI-PMH 2.0 XSD at
+        http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.
+      properties:
+        responseDate:
+          type: string
+          format: date-time
+        request:
+          type: string
+          format: uri
+        error:
+          $ref: '#/components/schemas/OAIError'
+        Identify:
+          $ref: '#/components/schemas/Identify'
+    Identify:
+      type: object
+      properties:
+        repositoryName:
+          type: string
+          examples: ['SNU Open Repository and Archive']
+        baseURL:
+          type: string
+          format: uri
+        protocolVersion:
+          type: string
+          const: '2.0'
+        adminEmail:
+          type: string
+          format: email
+        earliestDatestamp:
+          type: string
+          format: date-time
+          examples: ['2008-07-31T15:00:00Z']
+        deletedRecord:
+          type: string
+          enum: [no, persistent, transient]
+        granularity:
+          type: string
+          enum: ['YYYY-MM-DD', 'YYYY-MM-DDThh:mm:ssZ']
+    OAIError:
+      type: object
+      description: OAI-PMH protocol error, returned with HTTP 200.
+      properties:
+        code:
+          type: string
+          enum:
+            - badArgument
+            - badResumptionToken
+            - badVerb
+            - cannotDisseminateFormat
+            - idDoesNotExist
+            - noRecordsMatch
+            - noMetadataFormats
+            - noSetHierarchy
+        message:
+          type: string
+security: []

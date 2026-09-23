@@ -1,0 +1,67 @@
+generated: '2026-08-19'
+method: probed
+format: oai-pmh-error-element
+source: >-
+  Derived from openapi/snu-s-space-oai-pmh-openapi.yml and
+  openapi/snu-kossda-oai-pmh-openapi.yml, plus live error probes against
+  s-space.snu.ac.kr on 2026-08-19.
+description: >-
+  Seoul National University publishes no error reference, no problem-type registry and no
+  RFC 9457 application/problem+json envelope. Error semantics on its public surfaces come
+  entirely from the OAI-PMH 2.0 protocol, which reports protocol failures as an <error>
+  element inside a well-formed OAI-PMH response with HTTP status 200. Any client that
+  branches on HTTP status alone will read a bad request as a success.
+envelope:
+  media_type: application/xml
+  shape: '<OAI-PMH><responseDate/><request/><error code="..."/></OAI-PMH>'
+  http_status_for_protocol_errors: 200
+  rfc9457: false
+error_codes:
+  - code: badArgument
+    status: 200
+    description: The request includes illegal arguments, repeated arguments, or is missing a required argument.
+  - code: badResumptionToken
+    status: 200
+    description: The resumptionToken is invalid or expired.
+  - code: badVerb
+    status: 200
+    description: Illegal, missing, or repeated verb argument.
+  - code: cannotDisseminateFormat
+    status: 200
+    description: The metadataPrefix is not supported by the item or the repository.
+  - code: idDoesNotExist
+    status: 200
+    description: The identifier is unknown or illegal in this repository.
+  - code: noRecordsMatch
+    status: 200
+    description: The from/until/set/metadataPrefix combination selects an empty list.
+  - code: noMetadataFormats
+    status: 200
+    description: No metadata formats are available for the specified item.
+  - code: noSetHierarchy
+    status: 200
+    description: The repository does not support sets. Not applicable to S-Space or KOSSDA, both of which do.
+http_findings:
+  - path: /rest/*
+    status: 404
+    detail: >-
+      Correction to the 2026-06-03 review, which recorded /server/api and /rest as HTTP 403
+      and inferred a gated DSpace REST API. Behind the js-challenge cookie those paths
+      return 404 with the DSpace 5.5 "Document Not Found" page. There is no DSpace REST API
+      deployed at all — the 403 was the bot challenge, not an access control. Absent, not gated.
+  - path: /theme/, /local/
+    status: 200
+    detail: >-
+      Soft-404. etl.snu.ac.kr returns HTTP 200 with the identical 850-byte
+      "찾을 수 없습니다" (not found) body used for its 404s. Never treat a 200 from that host as presence.
+  - host: s-space.snu.ac.kr, kossda.snu.ac.kr
+    status: 200
+    detail: >-
+      Soft-200 bot challenge. Non-OAI paths return HTTP 200 with a ~1 KB js-challenge
+      HTML shell rather than the requested resource.
+  - host: api.snu.ac.kr
+    status: 403
+    detail: >-
+      Apache 403 at the root and 9-byte 404s on /v1, /api, /docs, /swagger, /health,
+      /openapi.json, /status. The hostname exists and resolves to SNU's block
+      (147.46.10.189) but exposes no public API. Do not read the hostname as a gateway.

@@ -1,0 +1,176 @@
+# generated: '2026-08-19'
+# method: probed
+# source: Live probes of https://kossda.snu.ac.kr/oai/request (verb=Identify,
+#   ListMetadataFormats) on 2026-08-19, plus the OAI-PMH 2.0 specification. KOSSDA is
+#   listed in re3data as r3d100014654 (https://doi.org/10.17616/R31NJNSU) with
+#   institution "Korea Social Science Data Archive at Seoul National University"; that
+#   registry record lists NO API, so this surface was not previously catalogued anywhere.
+# x-operator: institution
+openapi: 3.1.0
+info:
+  title: KOSSDA OAI-PMH Repository Interface
+  version: '2.0'
+  summary: >-
+    OAI-PMH 2.0 metadata harvesting for the Korea Social Science Data Archive, Seoul
+    National University's social-science research data archive.
+  description: >-
+    KOSSDA (한국사회과학자료원, Korea Social Science Data Archive) is Seoul National
+    University's social-science data archive, run on DSpace 5.6 at kossda.snu.ac.kr
+    (147.46.181.153, SNU's own address block) with the administrative contact
+    kossda@snu.ac.kr. It exposes an OAI-PMH 2.0 data provider with twelve metadata
+    formats and an earliestDatestamp of 2017-04-09, and mints handles under the
+    20.500.12236 prefix.
+
+    Two defects in the deployed contract are recorded rather than smoothed over. The
+    Identify response self-reports its `baseURL` as `http://kossda.snu.ac.kr/oai/request`
+    — plain HTTP — even though the endpoint is served over HTTPS, so a harvester that
+    trusts the advertised baseURL will follow an unencrypted URL. And the endpoint is
+    slow: Identify took more than 45 seconds on first request and needed a 120-second
+    client timeout to complete, which will time out most default harvester configurations.
+  x-generated: '2026-08-19'
+  x-method: probed
+  x-operator: institution
+  x-source: >-
+    Live probes of https://kossda.snu.ac.kr/oai/request (verbs Identify, ListMetadataFormats) on
+    2026-08-19, plus the OAI-PMH 2.0 specification and the re3data record r3d100014654. SNU
+    publishes no OpenAPI for this surface.
+  contact:
+    name: KOSSDA, Seoul National University
+    email: kossda@snu.ac.kr
+    url: https://kossda.snu.ac.kr/
+  license:
+    name: Not stated
+    identifier: NOASSERTION
+servers:
+  - url: https://kossda.snu.ac.kr/oai/request
+    description: >-
+      Default OAI-PMH context, reachable over HTTPS. The endpoint advertises itself as
+      http:// in its own Identify response; prefer this HTTPS form.
+  - url: https://kossda.snu.ac.kr/oai/driver
+    description: DRIVER guidelines harvesting context.
+tags:
+  - name: OAI-PMH
+    description: Open Archives Initiative Protocol for Metadata Harvesting 2.0 verbs.
+paths:
+  /:
+    get:
+      tags: [OAI-PMH]
+      operationId: kossdaOaiRequest
+      summary: Issue an OAI-PMH 2.0 request against KOSSDA
+      description: >-
+        Single-endpoint protocol; `verb` selects the operation. Responses are
+        `application/xml`. Allow a generous read timeout — see the description on
+        info for the measured latency.
+      parameters:
+        - name: verb
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, GetRecord]
+        - name: metadataPrefix
+          in: query
+          required: false
+          description: Twelve formats confirmed live on 2026-08-19.
+          schema:
+            type: string
+            enum: [oai_dc, qdc, mods, mets, marc, rdf, didl, ore, uketd_dc, xoai, dim, etdms]
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            type: string
+            examples: ['oai:kossda.snu.ac.kr:20.500.12236/1234']
+        - name: set
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: resumptionToken
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An OAI-PMH 2.0 response document, or a protocol error inside `<error>`.
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OAIPMHResponse'
+              examples:
+                identify:
+                  summary: verb=Identify (captured live 2026-08-19)
+                  externalValue: ../examples/snu-kossda-oai-identify-example.xml
+components:
+  schemas:
+    OAIPMHResponse:
+      type: object
+      description: >-
+        Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/.
+        Authoritative definition: http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.
+      properties:
+        responseDate:
+          type: string
+          format: date-time
+        request:
+          type: string
+          format: uri
+        Identify:
+          $ref: '#/components/schemas/Identify'
+        error:
+          $ref: '#/components/schemas/OAIError'
+    Identify:
+      type: object
+      properties:
+        repositoryName:
+          type: string
+          examples: ['한국사회과학자료원 (KOSSDA)']
+        baseURL:
+          type: string
+          format: uri
+        protocolVersion:
+          type: string
+          const: '2.0'
+        adminEmail:
+          type: string
+          format: email
+        earliestDatestamp:
+          type: string
+          format: date-time
+          examples: ['2017-04-09T11:10:50Z']
+        deletedRecord:
+          type: string
+          enum: [no, persistent, transient]
+        granularity:
+          type: string
+          enum: ['YYYY-MM-DD', 'YYYY-MM-DDThh:mm:ssZ']
+    OAIError:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - badArgument
+            - badResumptionToken
+            - badVerb
+            - cannotDisseminateFormat
+            - idDoesNotExist
+            - noRecordsMatch
+            - noMetadataFormats
+            - noSetHierarchy
+        message:
+          type: string
+security: []

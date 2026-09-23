@@ -1,0 +1,66 @@
+generated: '2026-08-19'
+method: probed
+source: >-
+  Live probes 2026-08-19 of s-space.snu.ac.kr (DSpace Generator meta tag),
+  kossda.snu.ac.kr (DSpace Generator meta tag), the eduGAIN metadata registration
+  extension for https://kafegw.snu.ac.kr/idp/simplesamlphp, and negative probes for
+  changelog / status / deprecation surfaces on snu.ac.kr.
+versioning:
+  scheme: protocol-version
+  mechanism: >-
+    None of SNU's surfaces are versioned by SNU. Each is pinned to the version of the
+    protocol it implements — OAI-PMH 2.0, OpenSearch 1.1, SAML 2.0 — and the only version
+    that moves is the version of the software underneath it, which SNU does not announce.
+  docs: null
+  notes: >-
+    There is no API version header, no version path segment, and no published version
+    policy on any SNU surface. A consumer's only version signal is the `<meta
+    name="Generator">` tag the repository software emits.
+software_versions:
+  - surface: S-Space
+    host: s-space.snu.ac.kr
+    software: DSpace 5.5
+    evidence: '<meta name="Generator" content="DSpace 5.5"/> in the served HTML, 2026-08-19'
+    note: >-
+      DSpace 5.5 was released in 2016 and is long out of support upstream; DSpace 7 and 8
+      have shipped since. This matters to an integrator: the DSpace 7 REST API
+      (/server/api) that most current DSpace tooling targets does not exist here, and the
+      repository's only programmable surfaces are the 5.x-era OAI-PMH and OpenSearch ones.
+  - surface: KOSSDA
+    host: kossda.snu.ac.kr
+    software: DSpace 5.6
+    evidence: '<meta name="Generator" content="DSpace 5.6"/> in the served HTML, 2026-08-19'
+  - surface: SNU Identity Provider
+    host: kafegw.snu.ac.kr
+    software: SimpleSAMLphp
+    evidence: >-
+      Endpoint paths /saml/module.php/saml/idp/* are the SimpleSAMLphp layout; exact
+      release not disclosed.
+deprecation:
+  policy_url: null
+  changelog: null
+  sunset_header: false
+  notes: >-
+    SNU publishes no deprecation policy, no changelog, and no RFC 8594 Sunset or
+    Deprecation headers on any surface. A consumer would learn of a breaking change by
+    the harvest failing.
+key_expiry:
+  - surface: SNU Identity Provider
+    what: SAML signing and encryption X.509 certificates
+    not_after: '2028-06-03'
+    issued: '2018-06-04'
+    note: >-
+      Ten-year self-signed certificates issued to CN=kafegw.snu.ac.kr. Recorded because
+      it is the one hard dated commitment anywhere in SNU's public surface, and because a
+      federation partner needs the rollover date.
+  - surface: SNU Identity Provider registration
+    what: KAFE federation registration
+    registered: '2024-06-25'
+sla:
+  url: null
+  public_uptime_target: null
+  status_page: null
+  notes: >-
+    No status page was found on any snu.ac.kr host. KOSSDA's OAI-PMH Identify required a
+    read timeout above 45 seconds to complete on 2026-08-19 and failed at 30s and 45s;
+    there is no published availability commitment against which to read that.
