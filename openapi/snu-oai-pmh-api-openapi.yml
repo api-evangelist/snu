@@ -106,36 +106,6 @@ paths:
                   externalValue: ../examples/snu-kossda-oai-identify-example.xml
 components:
   schemas:
-    OAIError:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - badArgument
-          - badResumptionToken
-          - badVerb
-          - cannotDisseminateFormat
-          - idDoesNotExist
-          - noRecordsMatch
-          - noMetadataFormats
-          - noSetHierarchy
-        message:
-          type: string
-    OAIPMHResponse:
-      type: object
-      description: 'Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/. Authoritative definition: http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.'
-      properties:
-        responseDate:
-          type: string
-          format: date-time
-        request:
-          type: string
-          format: uri
-        Identify:
-          $ref: '#/components/schemas/Identify'
-        error:
-          $ref: '#/components/schemas/OAIError'
     Identify:
       type: object
       properties:
@@ -168,3 +138,33 @@ components:
           enum:
           - YYYY-MM-DD
           - YYYY-MM-DDThh:mm:ssZ
+    OAIError:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - badArgument
+          - badResumptionToken
+          - badVerb
+          - cannotDisseminateFormat
+          - idDoesNotExist
+          - noRecordsMatch
+          - noMetadataFormats
+          - noSetHierarchy
+        message:
+          type: string
+    OAIPMHResponse:
+      type: object
+      description: 'Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/. Authoritative definition: http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.'
+      properties:
+        responseDate:
+          type: string
+          format: date-time
+        request:
+          type: string
+          format: uri
+        Identify:
+          $ref: '#/components/schemas/Identify'
+        error:
+          $ref: '#/components/schemas/OAIError'
