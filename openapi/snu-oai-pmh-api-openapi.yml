@@ -106,6 +106,20 @@ paths:
                   externalValue: ../examples/snu-kossda-oai-identify-example.xml
 components:
   schemas:
+    OAIPMHResponse:
+      type: object
+      description: 'Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/. Authoritative definition: http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.'
+      properties:
+        responseDate:
+          type: string
+          format: date-time
+        request:
+          type: string
+          format: uri
+        Identify:
+          $ref: '#/components/schemas/Identify'
+        error:
+          $ref: '#/components/schemas/OAIError'
     OAIError:
       type: object
       properties:
@@ -154,17 +168,3 @@ components:
           enum:
           - YYYY-MM-DD
           - YYYY-MM-DDThh:mm:ssZ
-    OAIPMHResponse:
-      type: object
-      description: 'Root `<OAI-PMH>` element in namespace http://www.openarchives.org/OAI/2.0/. Authoritative definition: http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd.'
-      properties:
-        responseDate:
-          type: string
-          format: date-time
-        request:
-          type: string
-          format: uri
-        Identify:
-          $ref: '#/components/schemas/Identify'
-        error:
-          $ref: '#/components/schemas/OAIError'
